@@ -1,0 +1,22 @@
+version: "3.9"
+volumes:
+  rust-target:
+services:
+  rust:
+    build:
+      context: .
+      dockerfile: ./infra/dev/rust/Dockerfile
+    tty: true
+    volumes:
+      - ./kernel:/kernel
+      - rust-target:/workspace/target
+  frontend:
+    build:
+      context: .
+      dockerfile: ./infra/dev/node/Dockerfile
+    tty: true
+    volumes:
+      - ./frontend:/frontend
+    environment:
+      - WATCHPACK_POLLING=true
+    command: sh -c "yarn install && yarn dev"

@@ -1,0 +1,13 @@
+# 大枠
+💻frontend:
+  - frontend/*
+⚙kernel:
+  - kernel/*
+
+# インフラ
+✈ci:
+  - .github/*
+  - backend/env.ci
+🏠localInfra:
+  - infra/dev/*
+  - docker-compose.yml
