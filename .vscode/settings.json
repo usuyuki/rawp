@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    "**/node_modules": true // node_modules を表示しない
+  },
+  "editor.tabSize": 2, // インデントのサイズを 2 に設定
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // デフォルトのフォーマッタを Prettier に設定
+  "editor.formatOnSave": true, // 保存時にフォーマッタを走らせる
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true, //保存時に import を整理する
+    "source.fixAll.eslint": true // 保村時に ESLint で修正する
+  },
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false // Markdown ファイルの末尾の空白を取り除く
+  }
+}
