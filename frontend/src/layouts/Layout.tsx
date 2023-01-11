@@ -1,8 +1,11 @@
+import Head from 'next/head';
+
 import Footer from '@/layouts/Footer';
 import Header from '@/layouts/Header';
+
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import type { ReactNode } from 'react';
+
 type Props = {
     children: ReactNode;
     title?: string;
