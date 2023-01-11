@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
+:root {
     --heder-height: 100px;
     --footer-height: 120px;
     --main-padding-top: 20px;
@@ -18,7 +18,16 @@
     }
 }
 
+@font-face {
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+    font-family: 'DotGothic16';
+    src: url('/fonts/DotGothic16-Regular.ttf') format('truetype');
+}
+
 body {
+    font-family: 'DotGothic16';
     scroll-behavior: smooth;
 }
 header {
