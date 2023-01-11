@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 :root {
+    --black: #094067;
+    --white: #fffffe;
+    --primary: #3da9fc;
+    --secondary: #90b4ce;
+    --tertiary: #ef4565;
+
     --heder-height: 100px;
     --footer-height: 120px;
     --main-padding-top: 20px;
