@@ -1,4 +1,4 @@
-name: frontendBuilder
+name: GitHubPagesのためのフロントエンドビルド
 
 on:
   push:
@@ -6,41 +6,39 @@ on:
       - main
 
 jobs:
-  build-deploy:
-    runs-on: ubuntu-22.04
+  frontend_build:
+    name: frontend build for github pages
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: setup node
-        uses: actions/setup-node@v1
+      - name: cache node_modules
+        id: cache_node
+        uses: actions/cache@v3
         with:
-          node-version: "18.x"
-
-      # yarn install のキャッシュ
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ./frontend/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-yarn-
 
-      - name: install
-        run: yarn install
+      - name: yarn install
+        if: steps.cache_node.outputs.cache-hit != 'true'
+        run: cd frontend && yarn install
 
       - name: build
-        run: yarn build
+        run: cd frontend && yarn build
 
       - name: export
-        run: yarn export
+        run: cd frontend && yarn export
 
       # GitHubPagesの_ディレクトリ読めない仕様回避
       - name: add nojekyll
-        run: touch ./out/.nojekyll
+        run: cd frontend && touch ./out/.nojekyll
 
       # 公開用のリポジトリにプッシュ
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          github_token: ${{ secrets.USUYUKI_GITHUB_TOKEN }}
+          publish_dir: ./frontend/out

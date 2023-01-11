@@ -1,0 +1,29 @@
+name: フロントエンドのLint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend_lint:
+    name: frontend build for github pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: cache node_modules
+        id: cache_node
+        uses: actions/cache@v3
+        with:
+          path: ./frontend/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: yarn install
+        if: steps.cache_node.outputs.cache-hit != 'true'
+        run: cd frontend && yarn install
+
+      - name: build
+        run: cd frontend && yarn lint
