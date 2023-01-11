@@ -1,6 +1,5 @@
-import DescribeH2 from '@/components/uiParts/Heading/DescribeH2';
-import 'material-symbols';
 import type { NextPage } from 'next';
+
 const ProgressCard: NextPage = () => {
     return (
         <div className="flex justify-center">

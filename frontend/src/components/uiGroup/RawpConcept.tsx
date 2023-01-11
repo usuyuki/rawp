@@ -1,5 +1,7 @@
 import DescribeH2 from '@/components/uiParts/Heading/DescribeH2';
+
 import type { NextPage } from 'next';
+
 const RawpConcept: NextPage = () => {
     return (
         <div className="flex justify-center">

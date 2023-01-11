@@ -1,8 +1,10 @@
-import RawpConcept from '@/components/uiGroup/RawpConcept';
-import Layout from '@/layouts/Layout';
-import type { NextPage } from 'next';
 import Link from 'next/link';
+
+import RawpConcept from '@/components/uiGroup/RawpConcept';
 import DescribeH3 from '@/components/uiParts/Heading/DescribeH3';
+import Layout from '@/layouts/Layout';
+
+import type { NextPage } from 'next';
 const IndexPage: NextPage = () => {
     return (
         <Layout>
