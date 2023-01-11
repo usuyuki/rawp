@@ -7,7 +7,6 @@
 # インフラ
 ✈ci:
   - .github/*
-  - backend/env.ci
 🏠localInfra:
   - infra/dev/*
   - docker-compose.yml
