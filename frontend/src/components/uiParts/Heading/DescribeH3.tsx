@@ -3,18 +3,15 @@ import type { NextPage } from 'next';
 
 type Props = {
     heading: string;
-    sub: string;
-    icon: string;
 };
 
-const DescribeH3: NextPage<Props> = ({ heading, sub, icon }) => {
+const DescribeH3: NextPage<Props> = ({ heading }) => {
     return (
-        <div className="mt-12 flex flex-col items-center justify-center">
+        <div className="mt-12 flex flex-col items-center">
             <div className="flex items-center justify-center">
-                <span className="material-symbols-outlined">{icon}</span>
+                <span className="mr-4 h-8 w-8 rounded-md bg-tertiary"></span>
                 <h3 className="pb-2 text-2xl md:text-3xl ">{heading}</h3>
             </div>
-            <p className="mt-2 text-sm ">{sub}</p>
         </div>
     );
 };

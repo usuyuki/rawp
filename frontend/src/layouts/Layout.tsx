@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 import Footer from '@/layouts/Footer';
 import Header from '@/layouts/Header';
+import SideShareMenu from '@/layouts/SideShareMenu';
 
 import type { NextPage } from 'next';
 import type { ReactNode } from 'react';
@@ -43,7 +44,29 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                     href="/img/favicon/apple-touch-icon-180x180.png"
                 />
                 <link rel="icon" type="image/png" href="/img/favicon/icon-192x192.png" />
+                {/* Google Analytics */}
+                <>
+                    <script
+                        async
+                        src={`https://www.googletagmanager.com/gtag/js?id=G-J7JHJXHKX3`}
+                    />
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', 'G-J7JHJXHKX3', {
+                                    page_path: window.location.pathname,
+                                });
+                                `,
+                        }}
+                    />
+                </>
             </Head>
+            <div className="absolute inset-y-0 right-4">
+                <SideShareMenu />
+            </div>
             <Header />
             <main>{children}</main>
             <Footer />

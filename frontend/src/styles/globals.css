@@ -77,3 +77,15 @@ main {
 .material-symbols-outlined.font-weight-100 {
     font-weight: 100;
 }
+
+.slide-share-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 30px;
+    height: 100%;
+    z-index: 20;
+
+    position: sticky;
+}
