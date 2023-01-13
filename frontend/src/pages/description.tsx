@@ -1,3 +1,4 @@
+import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
 
 import type { NextPage } from 'next';
@@ -5,7 +6,8 @@ import type { NextPage } from 'next';
 const DescriptionPage: NextPage = () => {
     return (
         <Layout title="仕組み">
-            <p>ここに仕組みの説明を入れる</p>
+            <DescribeH1 heading="仕組み" />
+            <p className="text-center">ここに仕組みの説明を入れる</p>
         </Layout>
     );
 };

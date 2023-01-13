@@ -1,16 +1,18 @@
+import Image from 'next/image';
+
 import PrimaryButton from '@/components/uiParts/Button/PrimaryButton';
 import Layout from '@/layouts/Layout';
+
 import type { NextPage } from 'next';
-import Image from 'next/image';
 
 const IndexPage: NextPage = () => {
     return (
         <Layout>
-            <p className="text-center my-2 mx-2 text-2xl">RAWPへようこそ。</p>
-            <p className="text-center my-2 mx-2">
+            <p className="m-2 text-center text-2xl">RAWPへようこそ。</p>
+            <p className="m-2 text-center">
                 ここでは重複を減らした複数回のグループ分けを生成できます
             </p>
-            <div className="flex items-center justify-centerq">
+            <div className="flex items-center justify-center">
                 <Image
                     src="img/icon/火星人のフリーイラスト2.svg"
                     alt="人物"

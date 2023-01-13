@@ -1,5 +1,6 @@
-import type { NextPage } from 'next';
 import Link from 'next/link';
+
+import type { NextPage } from 'next';
 const Header: NextPage = () => {
     return (
         <header className="sticky top-0 z-10 flex justify-around">
