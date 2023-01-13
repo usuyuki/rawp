@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 import Footer from '@/layouts/Footer';
 import Header from '@/layouts/Header';
+import SideShareMenu from '@/layouts/SideShareMenu';
 
 import type { NextPage } from 'next';
 import type { ReactNode } from 'react';
@@ -44,6 +45,9 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                 />
                 <link rel="icon" type="image/png" href="/img/favicon/icon-192x192.png" />
             </Head>
+            <div className="absolute inset-y-0 right-4">
+                <SideShareMenu />
+            </div>
             <Header />
             <main>{children}</main>
             <Footer />
