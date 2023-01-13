@@ -8,7 +8,7 @@ const DescriptionPage: NextPage = () => {
     return (
         <Layout title="仕組み">
             <DescribeH1 heading="仕組み" />
-            <DescribeH2 heading="NP困難" />
+            <DescribeH2 heading="GoogleAnalytics" />
             <p className="flex justify-center">
                 複数回のグループ分けで重複を減らしながら行うのはNP困難と呼ばれます。
                 <br />
