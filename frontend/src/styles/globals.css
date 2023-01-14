@@ -78,7 +78,7 @@ main {
     font-weight: 100;
 }
 
-.slide-share-element {
+.side-share-element {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,7 +86,6 @@ main {
     width: 30px;
     height: 100%;
     z-index: 20;
-
     position: sticky;
 }
 

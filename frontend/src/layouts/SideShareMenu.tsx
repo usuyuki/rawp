@@ -3,7 +3,8 @@ import Image from 'next/image';
 import type { NextPage } from 'next';
 const SideShareMenu: NextPage = () => {
     return (
-        <div className="slide-share-element">
+        // 位置の指定はこの要素を囲った要素でしている
+        <div className="side-share-element">
             <div className="flex flex-col items-center justify-center">
                 <p>share</p>
                 <div className="h-16 w-1 bg-black"></div>
