@@ -10,7 +10,7 @@ const AboutThisSite: NextPage = () => {
     return (
         <Layout title="このサイトについて">
             <DescribeH1 heading="このサイトについて" />
-            <DescribeH3 heading="NP困難" />
+            <DescribeH3 heading="Google Analytics" />
             <p className="flex justify-center">
                 本サービスでは、Googleによるアクセス解析ツール「GoogleAnalytics」を利用しています。このGoogleAnalyticsはトラフィックデータの収集のためにクッキー（Cookie）を使用しております。トラフィックデータは匿名で収集されており、個人を特定するものではありません。この機能はCookieを無効にすることで収集を拒否することが出来ますので、お使いのブラウザの設定をご確認ください。
             </p>
