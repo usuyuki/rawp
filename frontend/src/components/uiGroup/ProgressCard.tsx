@@ -1,6 +1,19 @@
 import type { NextPage } from 'next';
 
-const ProgressCard: NextPage = () => {
+type Props = {
+    roster: string[];
+    nOfPeople: number;
+    nOfGroups: number;
+    groupingTimes: number;
+    nOfAttempts: number;
+};
+const ProgressCard: NextPage<Props> = ({
+    roster,
+    nOfPeople,
+    nOfGroups,
+    groupingTimes,
+    nOfAttempts,
+}) => {
     return (
         <div className="flex justify-center">
             <p>進捗の表示</p>
