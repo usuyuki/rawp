@@ -16,8 +16,10 @@ const SideShareMenu: NextPage = () => {
                         <Image
                             src="/img/icon/TwitterLogoWhite.svg"
                             alt="Twitter"
-                            width={20}
-                            height={20}
+                            width="0"
+                            height="0"
+                            sizes="100%"
+                            className="w-1/2 h-auto"
                         />
                     </div>
                 </a>
