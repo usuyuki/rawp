@@ -20,7 +20,7 @@ const SideShareMenu: NextPage = () => {
                             width="0"
                             height="0"
                             sizes="100%"
-                            className="w-1/2 h-auto"
+                            className="h-auto w-1/2"
                         />
                     </div>
                 </a>
