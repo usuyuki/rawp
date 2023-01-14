@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Script from 'next/script';
 
 import Footer from '@/layouts/Footer';
 import Header from '@/layouts/Header';
@@ -46,11 +47,13 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                 <link rel="icon" type="image/png" href="/img/favicon/icon-192x192.png" />
                 {/* Google Analytics */}
                 <>
-                    <script
+                    <Script
+                        id="gaRemoteScript"
                         async
                         src={`https://www.googletagmanager.com/gtag/js?id=G-J7JHJXHKX3`}
                     />
-                    <script
+                    <Script
+                        id="gaInlineScript"
                         dangerouslySetInnerHTML={{
                             __html: `
                                 window.dataLayer = window.dataLayer || [];
@@ -64,7 +67,7 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                     />
                 </>
             </Head>
-            <div className="absolute inset-y-0 right-4">
+            <div className="fixed inset-y-0 right-4 ">
                 <SideShareMenu />
             </div>
             <Header />

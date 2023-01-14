@@ -14,7 +14,7 @@ const IndexPage: NextPage = () => {
             </p>
             <div className="flex items-center justify-center">
                 <Image
-                    src="img/icon/火星人のフリーイラスト2.svg"
+                    src="/img/icon/火星人のフリーイラスト2.svg"
                     alt="人物"
                     width={120}
                     height={120}

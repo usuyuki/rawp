@@ -9,7 +9,7 @@
     --secondary: #90b4ce;
     --tertiary: #ef4565;
 
-    --heder-height: 100px;
+    --heder-height: 60px;
     --footer-height: 120px;
     --main-padding-top: 20px;
     --main-max-width: 1300px;
@@ -58,6 +58,13 @@ main {
     padding-top: var(--main-padding-top);
 }
 
+/* input numberで上下のボタンを消す */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /* マテリアルアイコン関連のCSS */
 .material-symbols-outlined.md-18 {
     font-size: 18px;
@@ -78,7 +85,7 @@ main {
     font-weight: 100;
 }
 
-.slide-share-element {
+.side-share-element {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,6 +93,54 @@ main {
     width: 30px;
     height: 100%;
     z-index: 20;
-
     position: sticky;
+}
+
+.counter-element {
+    counter-reset: number 0;
+}
+
+.counter-element textarea {
+    resize: none !important;
+    border: 2px solid var(--primary);
+    border-radius: 5px;
+}
+.counter-element input {
+    border: 2px solid var(--primary);
+    border-radius: 5px;
+}
+
+/* 自動採番 */
+.form-element-heading::before {
+    counter-increment: number;
+    content: counter(number);
+    display: block;
+    position: relative;
+    left: 10px;
+    top: 0px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: var(--white);
+    text-align: center;
+    padding-top: 8px;
+    font-size: 24px;
+}
+
+.form-card-heading {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 15px;
+    left: -30px;
+    z-index: 5;
+}
+
+.result-element-heading {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 15px;
+    z-index: 5;
 }
