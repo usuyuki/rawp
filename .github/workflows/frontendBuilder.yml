@@ -36,6 +36,10 @@ jobs:
       - name: add nojekyll
         run: cd frontend && touch ./out/.nojekyll
 
+      # GitHubPagesがCNAMEをgh-pagesブランチに作ってしまい、毎回消えるので、mainブランチで保持してコピーする
+      - name: copy CNAME
+        run: cp CNAME ./frontend/out
+
       # 公開用のリポジトリにプッシュ
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
