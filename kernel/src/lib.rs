@@ -7,3 +7,14 @@ pub fn sums(value: i32) -> i32 {
     }
     a
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let result = sums(9);
+        assert_eq!(result, 45);
+    }
+}
