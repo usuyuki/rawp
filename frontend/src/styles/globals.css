@@ -35,6 +35,8 @@
 body {
     font-family: 'DotGothic16';
     scroll-behavior: smooth;
+    background-color: var(--white);
+    color: var(--black);
 }
 header {
     height: var(--heder-height);
@@ -111,7 +113,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 /* 自動採番 */
-.form-element-heading::before {
+.form-card-heading::before {
     counter-increment: number;
     content: counter(number);
     display: block;

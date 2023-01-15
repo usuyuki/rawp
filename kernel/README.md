@@ -5,3 +5,9 @@
 ```
 cargo run
 ```
+
+WASM のビルド
+
+```
+dc exec rust wasm-pack build
+```

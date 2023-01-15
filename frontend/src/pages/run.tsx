@@ -5,11 +5,13 @@ import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
-// import { useModal } from 'react-hooks-use-modal';
-
-type phaseType = 'waiting' | 'calculating' | 'finished';
 
 import type { NextPage } from 'next';
+
+// import { useModal } from 'react-hooks-use-modal';
+import { sums } from '@/libs/rawp_kernel_bg.wasm';
+type phaseType = 'waiting' | 'calculating' | 'finished';
+
 const Run: NextPage = () => {
     //参加者名簿
     const [roster, setRoster] = useState<string[]>([]);
@@ -25,6 +27,8 @@ const Run: NextPage = () => {
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
     //実行ログ
     const [calcLog, setCalcLog] = useState<string>('');
+    //検証用の一時変数
+    const [value, setValue] = useState(0);
 
     useEffect(() => {
         setNOfPeople(roster.length);
@@ -63,6 +67,13 @@ const Run: NextPage = () => {
         case 'waiting':
             returnElement = (
                 <div className="counter-element">
+                    <input
+                        onChange={(e) => {
+                            const v = Number(e.target.value);
+                            !isNaN(v) && setValue(sums(v));
+                        }}
+                    />
+                    <div>{value}</div>
                     <FormCard heading="参加者の名前">
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
@@ -76,7 +87,7 @@ const Run: NextPage = () => {
                         <p>(1グループあたり{Math.floor(nOfPeople / nOfGroup)}人程度)</p>
                         <div className="flex justify-center">
                             <button
-                                className="pb-1 mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfPeople > nOfGroup) {
                                         setNOfGroup(nOfGroup + 1);
@@ -116,7 +127,7 @@ const Run: NextPage = () => {
                         </div>
                         <div className="flex justify-center">
                             <button
-                                className="pb-1 mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     setGroupingTimes(groupingTimes + 1);
                                 }}
