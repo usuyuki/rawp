@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-
 import FormCard from '@/components/uiGroup/Card/FormCard';
 import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
+import { useEffect, useState } from 'react';
 // import { useModal } from 'react-hooks-use-modal';
-
+import { sums } from '@/libs/rawpKernel_bg.wasm';
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
 import type { NextPage } from 'next';
@@ -25,6 +24,8 @@ const Run: NextPage = () => {
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
     //実行ログ
     const [calcLog, setCalcLog] = useState<string>('');
+    //検証用の一時変数
+    const [value, setValue] = useState(0);
 
     useEffect(() => {
         setNOfPeople(roster.length);
@@ -63,6 +64,13 @@ const Run: NextPage = () => {
         case 'waiting':
             returnElement = (
                 <div className="counter-element">
+                    <input
+                        onChange={(e) => {
+                            const v = Number(e.target.value);
+                            !isNaN(v) && setValue(sums(v));
+                        }}
+                    />
+                    <div>{value}</div>
                     <FormCard heading="参加者の名前">
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
