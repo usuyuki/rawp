@@ -33,7 +33,7 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                 <meta property="og:description" content={formedDescription} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://rawp.usuyuki.net/" />
-                <meta property="og:image" content="https://rawp.usuyuki.net/img/ogp.png" />
+                <meta property="og:image" content="https://rawp.usuyuki.net/img/ogp/ogp.jpg" />
                 {/* <meta property="fb:app_id"      content="" /> */}
                 <meta name="twitter:card" content="summary" />
                 <meta name="twitter:site" content="@usuyuki26" />
