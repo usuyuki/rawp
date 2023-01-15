@@ -48,7 +48,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rawpKernel"
+name = "rawp_kernel"
 version = "0.1.0"
 dependencies = [
  "wasm-bindgen",

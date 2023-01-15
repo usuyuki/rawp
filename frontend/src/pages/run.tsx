@@ -5,7 +5,7 @@ import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
 import { useEffect, useState } from 'react';
 // import { useModal } from 'react-hooks-use-modal';
-import { sums } from '@/libs/rawpKernel_bg.wasm';
+import { sums } from '@/libs/rawp_kernel_bg.wasm';
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
 import type { NextPage } from 'next';
