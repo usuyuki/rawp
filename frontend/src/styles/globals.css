@@ -35,6 +35,8 @@
 body {
     font-family: 'DotGothic16';
     scroll-behavior: smooth;
+    background-color: var(--white);
+    color: var(--black);
 }
 header {
     height: var(--heder-height);
