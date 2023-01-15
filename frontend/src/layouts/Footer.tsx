@@ -3,7 +3,9 @@ import type { NextPage } from 'next';
 const Footer: NextPage = () => {
     return (
         <footer>
-            <p className="text-center text-xl">copyright usuyuki</p>
+            <div>
+                <p className="text-center text-xl">copyright usuyuki</p>
+            </div>
         </footer>
     );
 };
