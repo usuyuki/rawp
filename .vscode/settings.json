@@ -8,5 +8,6 @@
   },
   "[markdown]": {
     "files.trimTrailingWhitespace": false // Markdown ファイルの末尾の空白を取り除く
-  }
+  },
+  "cSpell.words": ["rawp"]
 }
