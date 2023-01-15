@@ -1,14 +1,17 @@
+import { useEffect, useState } from 'react';
+
 import FormCard from '@/components/uiGroup/Card/FormCard';
 import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
-import { useEffect, useState } from 'react';
+
+import type { NextPage } from 'next';
+
 // import { useModal } from 'react-hooks-use-modal';
 import { sums } from '@/libs/rawp_kernel_bg.wasm';
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
-import type { NextPage } from 'next';
 const Run: NextPage = () => {
     //参加者名簿
     const [roster, setRoster] = useState<string[]>([]);
@@ -84,7 +87,7 @@ const Run: NextPage = () => {
                         <p>(1グループあたり{Math.floor(nOfPeople / nOfGroup)}人程度)</p>
                         <div className="flex justify-center">
                             <button
-                                className="pb-1 mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfPeople > nOfGroup) {
                                         setNOfGroup(nOfGroup + 1);
@@ -124,7 +127,7 @@ const Run: NextPage = () => {
                         </div>
                         <div className="flex justify-center">
                             <button
-                                className="pb-1 mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     setGroupingTimes(groupingTimes + 1);
                                 }}
