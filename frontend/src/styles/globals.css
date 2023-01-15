@@ -111,7 +111,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 /* 自動採番 */
-.form-element-heading::before {
+.form-card-heading::before {
     counter-increment: number;
     content: counter(number);
     display: block;
