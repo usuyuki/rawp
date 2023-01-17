@@ -112,6 +112,11 @@ input[type='number']::-webkit-inner-spin-button {
     border-radius: 5px;
 }
 
+/* disableなら色落とす */
+button:disabled {
+    opacity: 0.3;
+}
+
 /* 自動採番 */
 .form-card-heading::before {
     counter-increment: number;

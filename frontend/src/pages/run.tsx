@@ -29,13 +29,31 @@ const Run: NextPage = () => {
     const [calcLog, setCalcLog] = useState<string>('');
     //検証用の一時変数
     const [value, setValue] = useState(0);
+    //バリデーションフラグ
+    const [validate, setValidate] = useState<boolean>(false);
 
     useEffect(() => {
         setNOfPeople(roster.length);
         if (nOfGroup > nOfPeople) {
             setNOfGroup(nOfPeople);
         }
-    }, [roster.length, nOfGroup, nOfPeople]);
+
+        /**
+         * バリデーション
+         * Rust側でu8にしている都合と現実的に計算できる数の都合で255まで
+         * クライアント簡潔なので厳密なバリデーションは不要、ユーザーに不便ないレベルまでバリデーションはする
+         */
+        if (
+            nOfPeople > 0 &&
+            nOfPeople < 255 &&
+            nOfGroup > 0 &&
+            nOfGroup < nOfPeople &&
+            groupingTimes > 0 &&
+            groupingTimes < 255
+        ) {
+            setValidate(true);
+        }
+    }, [roster.length, nOfGroup, nOfPeople, validate]);
 
     const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         //改行ごとに配列に格納、この配列のlengthを利用して人数とtextareaの幅調整も行う大変にSDGsなやつ
@@ -47,10 +65,15 @@ const Run: NextPage = () => {
     };
 
     const runCalculation = () => {
-        setNowPhase('calculating');
-        setCalcLog('計算開始\n');
-        //useStateの更新は時間かかるので、ある程度まとめて更新しないと値が入る前に上書きされてしまうらしい。
-        setCalcLog(calcLog + 'あああ\n');
+        if (validate) {
+            setNowPhase('calculating');
+            setCalcLog('計算開始\n');
+            //useStateの更新は時間かかるので、ある程度まとめて更新しないと値が入る前に上書きされてしまうらしい。
+            setCalcLog(calcLog + 'あああ\n');
+        } else {
+            //事前にバリデーションしてるので大丈夫だが、多重検証
+            alert('入力値が不正です。');
+        }
     };
 
     //モーダル表示用
@@ -78,6 +101,7 @@ const Run: NextPage = () => {
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
                         <div>{nOfPeople}人</div>
+                        <p>最大人数は255人までとしています。エラーハンドリングまだ</p>
                     </FormCard>
                     <FormCard heading="作成したいグループ数">
                         <div className="flex items-center justify-center">
@@ -170,10 +194,16 @@ const Run: NextPage = () => {
                             <p className="col-end-6 text-right">おそい</p>
                         </div>
                     </FormCard>
-                    <div className="my-6 flex justify-center">
+                    <div className="my-6 flex justify-center items-center flex-col">
+                        {validate ? (
+                            <p className="text-primary">バリデーションOK、実行できます！</p>
+                        ) : (
+                            <p className="text-tertiary">数値に問題があります。</p>
+                        )}
                         <button
                             onClick={runCalculation}
                             className="bg-tertiary py-6 px-12 text-3xl text-white"
+                            disabled={!validate}
                         >
                             演算開始
                         </button>
