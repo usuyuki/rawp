@@ -20,7 +20,7 @@ const Run: NextPage = () => {
     //グループ数
     const [nOfGroup, setNOfGroup] = useState<number>(1);
     //グループ分け回数
-    const [groupingTimes, setGroupingTimes] = useState<number>(1);
+    const [nOfTimes, setnOfTimes] = useState<number>(1);
     //試行回数
     const [nOfAttempts, setNOfAttempts] = useState<number>(5000);
     //フェーズの管理
@@ -48,8 +48,8 @@ const Run: NextPage = () => {
             nOfPeople < 255 &&
             nOfGroup > 0 &&
             nOfGroup < nOfPeople &&
-            groupingTimes > 0 &&
-            groupingTimes < 255
+            nOfTimes > 0 &&
+            nOfTimes < 255
         ) {
             setValidate(true);
         }
@@ -146,14 +146,14 @@ const Run: NextPage = () => {
                     </FormCard>
                     <FormCard heading="グループ分けする回数">
                         <div className="flex items-center justify-center">
-                            <p className="mx-2 text-6xl ">{groupingTimes}</p>
+                            <p className="mx-2 text-6xl ">{nOfTimes}</p>
                             <p className="text-2xl">回</p>
                         </div>
                         <div className="flex justify-center">
                             <button
                                 className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
-                                    setGroupingTimes(groupingTimes + 1);
+                                    setnOfTimes(nOfTimes + 1);
                                 }}
                             >
                                 +
@@ -161,8 +161,8 @@ const Run: NextPage = () => {
                             <button
                                 className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
                                 onClick={() => {
-                                    if (groupingTimes > 1) {
-                                        setGroupingTimes(groupingTimes - 1);
+                                    if (nOfTimes > 1) {
+                                        setnOfTimes(nOfTimes - 1);
                                     }
                                 }}
                             >
@@ -217,7 +217,7 @@ const Run: NextPage = () => {
                     roster={roster}
                     nOfPeople={nOfPeople}
                     nOfGroups={nOfGroup}
-                    groupingTimes={groupingTimes}
+                    nOfTimes={nOfTimes}
                     nOfAttempts={nOfAttempts}
                     calcLog={calcLog}
                 />
