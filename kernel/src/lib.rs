@@ -43,20 +43,22 @@ pub fn resolve_by_sa()->String{
 }
 
 //初期グループ分け生成
-fn create_first_mtg<T:Clone>(better_mtg:&mut MultipleTimesGroup, n_of_people:u8, n_of_group:u8, n_of_times:u8){
+fn create_first_mtg(n_of_people:u8, n_of_group:u8, n_of_times:u8)->MultipleTimesGroup{
     //グループ分けを格納する変数
-    let mut better_mtg:MultipleTimesGroup= vec![vec![vec![0; (n_of_people/n_of_group) as usize]; n_of_group as usize]; n_of_times as usize];
-    //グループ分けを格納する変数
-    let mut best_mtg:MultipleTimesGroup = vec![vec![vec![0; (n_of_people/n_of_group) as usize]; n_of_group as usize]; n_of_times as usize];
+    let mut mtg:MultipleTimesGroup= vec![vec![vec![0; (n_of_people/n_of_group) as usize]; n_of_group as usize]; n_of_times as usize];
 
+    let mut number:u8=0;
     //初期グループ分けを作成
     for i in 0..n_of_times{
         for j in 0..n_of_group{
             for k in 0..(n_of_people/n_of_group){
-                better_mtg[i as usize][j as usize][k as usize]  = (i*n_of_group*n_of_people/n_of_group + j*n_of_people/n_of_group + k) as u8;
+                mtg[i as usize][j as usize][k as usize]  =number;
+                number+=1;
             }
         }
+        number=0;
     }
+    mtg
 }
 
 //重複度の計算
@@ -64,9 +66,20 @@ fn calcMultiplicity(){
 
 }
 
-//メンバーの入れ替え
-fn swap(){
-
+/*
+ * メンバーの入れ替え
+ * https://qiita.com/tanakh/items/d70561f038a0ef4f0ff1#%E3%81%9D%E3%81%AE41-swap_remove%E3%82%92%E4%BD%BF%E3%81%86
+ */
+fn swap<T>(v: &mut Vec<Vec<T>>, i1: usize, j1: usize, i2: usize, j2: usize) {
+    if i1 == i2 {
+        v[i1].swap(j1, j2);
+        return;
+    }
+    let n = v[i1].len();
+    let mut e1 = v[i1].swap_remove(j1);
+    std::mem::swap(&mut v[i2][j2], &mut e1);
+    v[i1].push(e1);
+    v[i1].swap(j1, n - 1);
 }
 
 //vec型配列から文字列に変える(WASMで配列returnできないので)
@@ -91,12 +104,16 @@ mod tests {
 
     #[test]
     fn test_create_first_mtg(){
-        // createFirstMTG(better_mtg, n_of_people, n_of_group, n_of_times)
+        let test_array:MultipleTimesGroup = create_first_mtg(12, 3, 4);
+        assert_eq!(vec![vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11]], vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11]], vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11]], vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11]]],test_array);
     }
 
     #[test]
     fn test_swap(){
-        // swap()
+        let mut test_array:MultipleTimesGroup = vec![vec![vec![1,2],vec![3,4]],vec![vec![5,6],vec![7,8]],vec![vec![9,10],vec![11,12]]];
+        swap(&mut test_array[0],0,0,1,0);
+        assert_eq!(vec![vec![vec![3,2],vec![1,4]],vec![vec![5,6],vec![7,8]],vec![vec![9,10],vec![11,12]]],test_array);
+
     }
 
     #[test]
