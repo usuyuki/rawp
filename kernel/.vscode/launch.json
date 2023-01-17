@@ -9,7 +9,7 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["build", "--bin=start", "--package=start"],
+                "args": ["build", "--bin=src", "--package=start"],
                 "filter": {
                     "name": "start",
                     "kind": "bin"
