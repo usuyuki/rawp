@@ -1,8 +1,9 @@
 {
     "[rust]": {
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
     },
     "rust-analyzer.cargo.allFeatures": true,
     "rust-analyzer.checkOnSave.command": "clippy",
-    "rust-analyzer.checkOnSave.extraArgs": ["--", "-A", "clippy::needless_return"]
+    "rust-analyzer.checkOnSave.extraArgs": ["--", "-A", "clippy::needless_return"],
 }
