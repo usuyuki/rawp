@@ -7,7 +7,7 @@ edition = "2021"
 
 [lib]
 crate-type = ["cdylib"]
-path = "src/sa.rs"
+path = "src/lib.rs"
 
 [[bin]]
 name = "main"

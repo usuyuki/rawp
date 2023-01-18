@@ -1,0 +1,13 @@
+{
+  "name": "rawp_kernel",
+  "version": "0.1.0",
+  "files": [
+    "rawp_kernel_bg.wasm",
+    "rawp_kernel.js",
+    "rawp_kernel_bg.js",
+    "rawp_kernel.d.ts"
+  ],
+  "module": "rawp_kernel.js",
+  "types": "rawp_kernel.d.ts",
+  "sideEffects": false
+}

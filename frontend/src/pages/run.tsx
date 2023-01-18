@@ -9,7 +9,7 @@ import Layout from '@/layouts/Layout';
 import type { NextPage } from 'next';
 
 // import { useModal } from 'react-hooks-use-modal';
-import { sums } from '@/libs/rawp_kernel_bg.wasm';
+import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
 const Run: NextPage = () => {
@@ -68,8 +68,13 @@ const Run: NextPage = () => {
         if (validate) {
             setNowPhase('calculating');
             setCalcLog('計算開始\n');
-            //useStateの更新は時間かかるので、ある程度まとめて更新しないと値が入る前に上書きされてしまうらしい。
-            setCalcLog(calcLog + 'あああ\n');
+            //乱数用の時間生成
+            let timeObj = new Date();
+            let result = resolve_by_sa(nOfPeople, nOfGroup, nOfTimes, timeObj.getTime());
+
+            //文字列で返ってくるので配列に変換
+
+            setNowPhase('finished');
         } else {
             //事前にバリデーションしてるので大丈夫だが、多重検証
             alert('入力値が不正です。');
