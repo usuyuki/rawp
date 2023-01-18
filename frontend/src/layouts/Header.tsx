@@ -1,21 +1,22 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import type { NextPage } from 'next';
 const Header: NextPage = () => {
     return (
-        <header className="sticky top-0 z-10 flex flex-wrap justify-around">
-            <Link href="/">
-                <p className="text-primary">トップ</p>
-            </Link>
-            <Link href="/run">
-                <p className="text-primary">実行</p>
-            </Link>
-            <Link href="/description">
-                <p className="text-primary">仕組み</p>
-            </Link>
-            <Link href="/aboutThisSite">
-                <p className="text-primary">このサイトについて</p>
-            </Link>
+        <header className="sticky top-0 z-10 ">
+            <div className="flex flex-wrap justify-around">
+                <Link href="/" className="mx-2 flex items-center justify-center">
+                    <Image
+                        src="/img/icon/rawpLogoLight.svg"
+                        width={40}
+                        height={40}
+                        alt="RAWPロゴ"
+                        className="mr-2"
+                    />
+                    <p className="text-2xl text-primary ">RAWP</p>
+                </Link>
+            </div>
         </header>
     );
 };
