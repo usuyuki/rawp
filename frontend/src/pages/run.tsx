@@ -69,6 +69,7 @@ const Run: NextPage = () => {
         if (validate) {
             setValidate(false);
             setNowPhase('calculating');
+
             //乱数用の時間生成
             let timeObj = new Date();
             let result: string = resolve_by_sa(
@@ -77,7 +78,6 @@ const Run: NextPage = () => {
                 nOfTimes,
                 BigInt(timeObj.getTime()),
             );
-            //数字文字列で返ってくるので数字を名前に変換
 
             //文字列を配列に変換
             let rawArray: string[] = result.split(',');
@@ -93,9 +93,15 @@ const Run: NextPage = () => {
                 }
                 resultArray.push(tmpArray);
             }
+            //人物名配列への変換 配列にする前に最初変換する方式だったが、人物名に名前が入ると壊れるのでこの方式に変更
+            for (let [i, byCount] of resultArray.entries()) {
+                for (let [j, byGroup] of byCount.entries()) {
+                    for (let [k, byMember] of byGroup.entries()) {
+                        resultArray[i][j][k] = roster[Number(byMember)];
+                    }
+                }
+            }
 
-            console.log(result);
-            console.log(resultArray);
             setResultGrouping(resultArray);
             setNowPhase('finished');
         } else {
