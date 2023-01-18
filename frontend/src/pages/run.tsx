@@ -28,8 +28,6 @@ const Run: NextPage = () => {
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
     //グループ分け結果を格納する変数
     const [resultGrouping, setResultGrouping] = useState<string[][][]>([]);
-    //検証用の一時変数
-    const [value, setValue] = useState(0);
     //バリデーションフラグ
     const [validate, setValidate] = useState<boolean>(false);
 
@@ -54,7 +52,7 @@ const Run: NextPage = () => {
         ) {
             setValidate(true);
         }
-    }, [roster.length, nOfGroup, nOfPeople, validate]);
+    }, [roster.length, nOfGroup, nOfPeople, nOfTimes, validate]);
 
     const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         //改行ごとに配列に格納、この配列のlengthを利用して人数とtextareaの幅調整も行う大変にSDGsなやつ
@@ -71,8 +69,8 @@ const Run: NextPage = () => {
             setNowPhase('calculating');
 
             //乱数用の時間生成
-            let timeObj = new Date();
-            let result: string = resolve_by_sa(
+            const timeObj = new Date();
+            const result: string = resolve_by_sa(
                 nOfPeople,
                 nOfGroup,
                 nOfTimes,
@@ -80,27 +78,28 @@ const Run: NextPage = () => {
             );
 
             //文字列を配列に変換
-            let rawArray: string[] = result.split(',');
-            let rawArrayLength: number = rawArray.length;
+            const rawArray: string[] = result.split(',');
             //1次元配列から本来の3次元配列に戻す
-            let resultArray: string[][][] = [];
-            let sliceCounter: number = 0;
-            let perGroup: number = nOfPeople / nOfGroup;
+            const resultArray: string[][][] = [];
+            let sliceCounter = 0;
+            const perGroup: number = nOfPeople / nOfGroup;
             for (let i = 0; i < nOfTimes; i++) {
-                let tmpArray: string[][] = [];
+                const tmpArray: string[][] = [];
                 for (let j = 0; j < nOfGroup; j++) {
                     tmpArray.push(rawArray.slice(sliceCounter, (sliceCounter += perGroup)));
                 }
                 resultArray.push(tmpArray);
             }
             //人物名配列への変換 配列にする前に最初変換する方式だったが、人物名に名前が入ると壊れるのでこの方式に変更
-            for (let [i, byCount] of resultArray.entries()) {
-                for (let [j, byGroup] of byCount.entries()) {
-                    for (let [k, byMember] of byGroup.entries()) {
-                        resultArray[i][j][k] = roster[Number(byMember)];
-                    }
+            resultArray.forEach((byCount, i) => {
+                {
+                    byCount.forEach((byGroup, j) => {
+                        byGroup.forEach((byMember, k) => {
+                            resultArray[i][j][k] = roster[Number(byMember)];
+                        });
+                    });
                 }
-            }
+            });
 
             setResultGrouping(resultArray);
             setNowPhase('finished');
@@ -221,7 +220,7 @@ const Run: NextPage = () => {
                             <p className="col-end-6 text-right">おそい</p>
                         </div>
                     </FormCard>
-                    <div className="my-6 flex justify-center items-center flex-col">
+                    <div className="my-6 flex flex-col items-center justify-center">
                         {validate ? (
                             <p className="text-primary">バリデーションOK、実行できます！</p>
                         ) : (

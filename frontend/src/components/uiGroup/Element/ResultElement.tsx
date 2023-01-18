@@ -21,7 +21,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping }) => {
                                         グループ{groupIndex + 1}
                                     </p>
                                 </div>
-                                <div className="flex items-center justify-center md:flex-row flex-col rounded-xl border-2 border-dotted border-primary px-4 py-6 ">
+                                <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dotted border-primary px-4 py-6 md:flex-row ">
                                     {group.map((person, personIndex) => (
                                         <div
                                             key={personIndex}
@@ -30,7 +30,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping }) => {
                                             <span className="material-symbols-outlined text-3xl">
                                                 person
                                             </span>
-                                            <h3 className="pb-2 text-2xl md:text-xl px-4 ">
+                                            <h3 className="px-4 pb-2 text-2xl md:text-xl ">
                                                 {person}
                                             </h3>
                                         </div>
