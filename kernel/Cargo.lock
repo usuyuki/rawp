@@ -21,8 +21,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c05aeb6a22b8f62540c194aac980f2115af067bfe15a0734d7277a768d396b31"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "wasi",
+ "wasm-bindgen",
+]
+
+[[package]]
+name = "js-sys"
+version = "0.3.60"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "49409df3e3bf0856b916e2ceaca09ee28e6871cf7d9ce97a692cacfdb2a25a47"
+dependencies = [
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -113,6 +124,7 @@ dependencies = [
 name = "rawp_kernel"
 version = "0.1.0"
 dependencies = [
+ "getrandom",
  "rand",
  "rand_xoshiro",
  "wasm-bindgen",

@@ -7,12 +7,14 @@ edition = "2021"
 
 [lib]
 crate-type = ["cdylib"]
+path = "src/sa.rs"
 
 [[bin]]
 name = "main"
 path = "src/lib.rs"
 
 [dependencies]
+getrandom = { version = "0.2", features = ["js"] }
 rand = "0.8.5"
 rand_xoshiro = "0.6.0"
 wasm-bindgen = "0.2"
