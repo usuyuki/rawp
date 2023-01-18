@@ -127,14 +127,20 @@ const Run: NextPage = () => {
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
                         <div>{nOfPeople}人</div>
-                        <p>最大人数は255人までとしています。エラーハンドリングまだ</p>
+                        <p>※最大人数:255人</p>
                     </FormCard>
                     <FormCard heading="作成したいグループ数">
                         <div className="flex items-center justify-center">
                             <p className="mx-2 text-6xl ">{nOfGroup}</p>
                             <p className="text-2xl">グループ</p>
                         </div>
-                        <p>(1グループあたり{Math.floor(nOfPeople / nOfGroup)}人程度)</p>
+                        <p>
+                            (1グループあたり
+                            {nOfPeople === 0 || nOfGroup == 0
+                                ? '-'
+                                : Math.floor(nOfPeople / nOfGroup)}
+                            人程度)
+                        </p>
                         <div className="flex justify-center">
                             <button
                                 className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
@@ -157,18 +163,9 @@ const Run: NextPage = () => {
                                 <p>-</p>
                             </button>
                         </div>
-                        <p className="mt-6">人数に過不足がある時の挙動</p>
-                        <label className="mt-4 inline-flex cursor-pointer flex-col items-center md:flex-row">
-                            <input type="checkbox" value="" className="peer sr-only" />
-                            {/* ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 */}
-                            {/* <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> */}
-                            <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
-                                グループ数は変えずに1グループあたりの人数を増やす
-                            </span>
-                            <span className="ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary">
-                                少ない人数で構成された グループを追加する
-                            </span>
-                        </label>
+                        <p className="mt-6">
+                            実装が間に合わず、現在人数に過不足があると正しく動かない仕様となっております。割り切れるグループ数を選択肢てください
+                        </p>
                     </FormCard>
                     <FormCard heading="グループ分けする回数">
                         <div className="flex items-center justify-center">
@@ -196,35 +193,11 @@ const Run: NextPage = () => {
                             </button>
                         </div>
                     </FormCard>
-                    <FormCard heading="オプション">
-                        <p>人数に過不足がある時</p>
-                        <p>演算モード{nOfAttempts}</p>
-                        <div className="grid grid-cols-5 grid-rows-3 md:w-2/3 md:gap-4">
-                            {/* 1行目 */}
-                            <p>精度</p>
-                            <p>多少被りを許容する</p>
-                            <p className="col-end-6 text-right">被りをできる限りなくす</p>
-                            {/* 2行目 */}
-                            <input
-                                type="range"
-                                min="1000"
-                                max="1000000"
-                                step="100"
-                                value={nOfAttempts}
-                                onChange={updateNOfAttempts}
-                                className="col-start-2 col-end-6 h-4 cursor-pointer appearance-none rounded-lg bg-secondary"
-                            />
-                            {/* 3行目 */}
-                            <p>計算時間</p>
-                            <p>はやい</p>
-                            <p className="col-end-6 text-right">おそい</p>
-                        </div>
-                    </FormCard>
                     <div className="my-6 flex flex-col items-center justify-center">
                         {validate ? (
                             <p className="text-primary">バリデーションOK、実行できます！</p>
                         ) : (
-                            <p className="text-tertiary">数値に問題があります。</p>
+                            <p className="text-tertiary">まだ実行できません。</p>
                         )}
                         <button
                             onClick={runCalculation}
