@@ -1,27 +1,24 @@
 import type { NextPage } from 'next';
 
-type Props = {
+type props = {
     roster: string[];
     nOfPeople: number;
     nOfGroups: number;
-    groupingTimes: number;
+    nOfTimes: number;
     nOfAttempts: number;
-    calcLog: string;
 };
-const ProgressElement: NextPage<Props> = ({
+const ProgressElement: NextPage<props> = ({
     roster,
     nOfPeople,
     nOfGroups,
-    groupingTimes,
+    nOfTimes,
     nOfAttempts,
-    calcLog,
 }) => {
     return (
         <div className="flex flex-col items-center justify-center">
             <p className="my-4 text-2xl">計算中</p>
             <p>試行回数：</p>
             <p className="mt-4">ログ</p>
-            <p className="m-2 rounded-2xl border border-dotted border-primary p-4">{calcLog}</p>
         </div>
     );
 };

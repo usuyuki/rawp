@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug executable 'start'",
+            "name": "Debug executable 'main'",
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["build", "--bin=start", "--package=start"],
+                "args": ["build", "--bin=main", "--package=rawp_kernel"],
                 "filter": {
-                    "name": "start",
+                    "name": "main",
                     "kind": "bin"
                 }
             },
@@ -20,13 +20,13 @@
             "initCommands": ["settings set target.disable-aslr false"]
         },
         {
-            "name": "Debug unit tests in executable 'start'",
+            "name": "Debug unit tests in executable 'src'",
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["test", "--no-run", "--bin=start", "--package=start"],
+                "args": ["test", "--no-run", "--bin=main", "--package=rawp_kernel"],
                 "filter": {
-                    "name": "start",
+                    "name": "main",
                     "kind": "bin"
                 }
             },
