@@ -19,7 +19,6 @@ const ProgressElement: NextPage<props> = ({
             <p className="my-4 text-2xl">計算中</p>
             <p>試行回数：</p>
             <p className="mt-4">ログ</p>
-            <p className="m-2 rounded-2xl border border-dotted border-primary p-4">{calcLog}</p>
         </div>
     );
 };
