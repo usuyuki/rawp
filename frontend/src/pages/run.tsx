@@ -9,7 +9,8 @@ import Layout from '@/layouts/Layout';
 import type { NextPage } from 'next';
 
 // import { useModal } from 'react-hooks-use-modal';
-import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';
+import { resolve_by_sa } from '@/libs/rawp_kernel.js';
+// import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
 const Run: NextPage = () => {
@@ -25,8 +26,8 @@ const Run: NextPage = () => {
     const [nOfAttempts, setNOfAttempts] = useState<number>(5000);
     //フェーズの管理
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
-    //実行ログ
-    const [calcLog, setCalcLog] = useState<string>('');
+    //グループ分け結果を格納する変数
+    const [resultGrouping, setResultGrouping] = useState<string[][][]>([]);
     //検証用の一時変数
     const [value, setValue] = useState(0);
     //バリデーションフラグ
@@ -66,14 +67,36 @@ const Run: NextPage = () => {
 
     const runCalculation = () => {
         if (validate) {
+            setValidate(false);
             setNowPhase('calculating');
-            setCalcLog('計算開始\n');
             //乱数用の時間生成
             let timeObj = new Date();
-            let result = resolve_by_sa(nOfPeople, nOfGroup, nOfTimes, timeObj.getTime());
+            let result: string = resolve_by_sa(
+                nOfPeople,
+                nOfGroup,
+                nOfTimes,
+                BigInt(timeObj.getTime()),
+            );
+            //数字文字列で返ってくるので数字を名前に変換
 
-            //文字列で返ってくるので配列に変換
+            //文字列を配列に変換
+            let rawArray: string[] = result.split(',');
+            let rawArrayLength: number = rawArray.length;
+            //1次元配列から本来の3次元配列に戻す
+            let resultArray: string[][][] = [];
+            let sliceCounter: number = 0;
+            let perGroup: number = nOfPeople / nOfGroup;
+            for (let i = 0; i < nOfTimes; i++) {
+                let tmpArray: string[][] = [];
+                for (let j = 0; j < nOfGroup; j++) {
+                    tmpArray.push(rawArray.slice(sliceCounter, (sliceCounter += perGroup)));
+                }
+                resultArray.push(tmpArray);
+            }
 
+            console.log(result);
+            console.log(resultArray);
+            setResultGrouping(resultArray);
             setNowPhase('finished');
         } else {
             //事前にバリデーションしてるので大丈夫だが、多重検証
@@ -95,13 +118,6 @@ const Run: NextPage = () => {
         case 'waiting':
             returnElement = (
                 <div className="counter-element">
-                    <input
-                        onChange={(e) => {
-                            const v = Number(e.target.value);
-                            !isNaN(v) && setValue(sums(v));
-                        }}
-                    />
-                    <div>{value}</div>
                     <FormCard heading="参加者の名前">
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
@@ -224,12 +240,11 @@ const Run: NextPage = () => {
                     nOfGroups={nOfGroup}
                     nOfTimes={nOfTimes}
                     nOfAttempts={nOfAttempts}
-                    calcLog={calcLog}
                 />
             );
             break;
         case 'finished':
-            returnElement = <ResultElement />;
+            returnElement = <ResultElement resultGrouping={resultGrouping} />;
             break;
     }
     return (

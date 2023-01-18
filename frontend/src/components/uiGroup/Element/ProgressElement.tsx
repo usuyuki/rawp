@@ -1,20 +1,18 @@
 import type { NextPage } from 'next';
 
-type Props = {
+type props = {
     roster: string[];
     nOfPeople: number;
     nOfGroups: number;
-    groupingTimes: number;
+    nOfTimes: number;
     nOfAttempts: number;
-    calcLog: string;
 };
-const ProgressElement: NextPage<Props> = ({
+const ProgressElement: NextPage<props> = ({
     roster,
     nOfPeople,
     nOfGroups,
-    groupingTimes,
+    nOfTimes,
     nOfAttempts,
-    calcLog,
 }) => {
     return (
         <div className="flex flex-col items-center justify-center">

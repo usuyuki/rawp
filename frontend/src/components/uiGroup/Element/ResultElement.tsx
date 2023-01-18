@@ -1,6 +1,9 @@
 import 'material-symbols';
 import type { NextPage } from 'next';
-const ResultElement: NextPage = () => {
+type props = {
+    resultGrouping: string[][][];
+};
+const ResultElement: NextPage<props> = ({ resultGrouping }) => {
     return (
         <div className="flex flex-col justify-center">
             {/* 回数 */}
