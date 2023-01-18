@@ -9,7 +9,7 @@ import Layout from '@/layouts/Layout';
 import type { NextPage } from 'next';
 
 // import { useModal } from 'react-hooks-use-modal';
-import { resolve_by_sa } from '@/libs/rawp_kernel.js';
+import { resolve_by_sa } from '@/libs/rawpKernel/rawp_kernel.js';
 // import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
