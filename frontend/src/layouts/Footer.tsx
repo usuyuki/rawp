@@ -1,11 +1,12 @@
-import type { NextPage } from 'next';
 import Link from 'next/link';
+
+import type { NextPage } from 'next';
 
 const Footer: NextPage = () => {
     return (
         <footer>
             <div>
-                <div className="flex flex-wrap justify-around mt-6">
+                <div className="mt-6 flex flex-wrap justify-around">
                     <Link href="/" className="mx-4">
                         <p className="text-primary">トップ</p>
                     </Link>
@@ -19,10 +20,10 @@ const Footer: NextPage = () => {
                         <p className="text-primary">このサイトについて</p>
                     </Link>
                 </div>
-                <div className="flex flex-col justify-around mt-6">
-                    <p className="text-center m-2">copyright usuyuki</p>
+                <div className="mt-6 flex flex-col justify-around">
+                    <p className="m-2 text-center">copyright usuyuki</p>
                     <a
-                        className="text-center text-sm m-2"
+                        className="m-2 text-center text-sm"
                         href="https://github.com/usuyuki/rawp"
                         target="_blank"
                         rel="noreferrer noopener"
