@@ -253,7 +253,7 @@ const Run: NextPage = () => {
                             <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
                                 グループ数は変えずに1グループあたりの人数を増やす
                             </span>
-                            <span className="ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary">
+                            <span className="mt-2 ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary md:mt-0">
                                 少ない人数で構成されたグループを追加する
                             </span>
                         </label>

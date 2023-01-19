@@ -12,7 +12,7 @@ type DuplicatinCountVec = Vec<Vec<u8>>; //人x人の配列
 
 #[wasm_bindgen]
 pub fn resolve_by_sa(n_of_people: u8, n_of_group: u8, n_of_times: u8, seed: u64) -> String{
-    let debug: bool = true; //デバッグ用
+    let debug: bool = false; //デバッグ用
 
     //1グループあたりの人数(簡単に求められるがよく使うので変数に入れておく)
     // @todo 端数でたときどする問題対処
