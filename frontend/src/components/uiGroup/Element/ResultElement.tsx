@@ -7,12 +7,11 @@ type props = {
 const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
     return (
         <div className="flex flex-col justify-center">
-            <button
-                className="m-4 rounded-xl border-2 border-primary  px-4 py-2"
-                onClick={runCalculationAgain}
-            >
-                再計算する
-            </button>
+            <div className="flex flex-col items-center justify-center">
+                <p className="text-sm text-tertiary">
+                    大域最適解をできる限り求めていますが、重複が生じる場合もございます
+                </p>
+            </div>
             {resultGrouping.map((round, roundIndex) => (
                 <div key={roundIndex}>
                     <div className="result-element-heading">
@@ -20,7 +19,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                             {roundIndex + 1}回目
                         </p>
                     </div>
-                    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dotted border-black px-4 py-6 ">
+                    <div className="flex flex-col flex-wrap items-center justify-center rounded-xl border-2 border-dotted border-black px-4 py-6 ">
                         {round.map((group, groupIndex) => (
                             <div key={groupIndex}>
                                 <div className="result-element-heading">
@@ -28,7 +27,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                                         グループ{groupIndex + 1}
                                     </p>
                                 </div>
-                                <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dotted border-primary px-4 py-6 md:flex-row ">
+                                <div className="flex flex-col flex-wrap items-center justify-center rounded-xl border-2 border-dotted border-primary px-4 py-6 md:flex-row ">
                                     {group.map((person, personIndex) => (
                                         <div
                                             key={personIndex}
@@ -48,6 +47,14 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                     </div>
                 </div>
             ))}
+            <div className="flex items-center justify-center">
+                <button
+                    className="m-4 rounded-xl border-2 border-primary  px-4 py-2 duration-500 hover:bg-primary hover:text-white"
+                    onClick={runCalculationAgain}
+                >
+                    再計算する
+                </button>
+            </div>
         </div>
     );
 };
