@@ -7,13 +7,11 @@ type props = {
 const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
     return (
         <div className="flex flex-col justify-center">
-            <div className="flex items-center justify-end">
-                <button
-                    className="m-4 rounded-xl border-2 border-primary  px-4 py-2 duration-500 hover:bg-primary hover:text-white"
-                    onClick={runCalculationAgain}
-                >
-                    再計算する
-                </button>
+            <div className="flex items-center justify-center flex-col">
+                <h2 className="text-2xl md:text-3xl">演算結果</h2>
+                <p className="text-tertiary text-sm">
+                    大域最適解をできる限り求めていますが、重複が生じる場合もございます
+                </p>
             </div>
             {resultGrouping.map((round, roundIndex) => (
                 <div key={roundIndex}>
@@ -50,6 +48,14 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                     </div>
                 </div>
             ))}
+            <div className="flex items-center justify-center">
+                <button
+                    className="m-4 rounded-xl border-2 border-primary  px-4 py-2 duration-500 hover:bg-primary hover:text-white"
+                    onClick={runCalculationAgain}
+                >
+                    再計算する
+                </button>
+            </div>
         </div>
     );
 };
