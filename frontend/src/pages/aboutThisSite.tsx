@@ -86,7 +86,7 @@ const AboutThisSite: NextPage = () => {
                     <p>Primary</p>
                 </div>
                 <div className="m-4 flex flex-col items-center justify-center">
-                    <div className="h-12 w-12 rounded-full bg-black"></div>
+                    <div className="h-12 w-12 rounded-full bg-secondary"></div>
                     <p>Secondary</p>
                 </div>
                 <div className="m-4 flex flex-col items-center justify-center">
