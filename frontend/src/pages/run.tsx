@@ -123,11 +123,10 @@ const Run: NextPage = () => {
             setRunFlag(false);
             window.scrollTo(0, 0);
         }
-    }, [runFlag]);
+    }, [runFlag, isAddGroup, isExcessOrDeficiency, nOfGroup, nOfPeople, nOfTimes, roster]);
 
     //演算開始ボタン押下
     const runCalculation = () => {
-        console.log('演算開始');
         setNowPhase('calculating');
         window.scrollTo(0, 0);
     };
@@ -189,7 +188,7 @@ const Run: NextPage = () => {
                         </p>
                         <div className="flex justify-center">
                             <button
-                                className="mx-4 my-2 flex h-12 w-12 flex items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfPeople > nOfGroup) {
                                         setNOfGroup(nOfGroup + 1);
@@ -199,7 +198,7 @@ const Run: NextPage = () => {
                                 +
                             </button>
                             <button
-                                className="mx-4 my-2 flex h-12 w-12 flex items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfGroup > 1) {
                                         setNOfGroup(nOfGroup - 1);
@@ -259,7 +258,7 @@ const Run: NextPage = () => {
                     </FormCard>
                     <div className="my-6 flex flex-col items-center justify-center">
                         {validate ? (
-                            <p className="text-primary">バリデーションOK、実行できます！</p>
+                            <p className="text-primary">バリデーションOK、実行できます🥳</p>
                         ) : (
                             <p className="text-tertiary">指定の入力を終えると実行できます。</p>
                         )}

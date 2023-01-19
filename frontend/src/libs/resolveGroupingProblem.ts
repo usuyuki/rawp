@@ -65,7 +65,6 @@ export const resolveGroupingProblem = (
                     resultArray[i][j][k] = roster[Number(byMember)];
                 });
                 //帳尻合わせした配列を治す(空要素を消す)
-                console.log(resultArray[i][j]);
                 if (isExcessOrDeficiency) {
                     resultArray[i][j] = resultArray[i][j].filter((byMember) => {
                         return byMember !== '';
