@@ -7,12 +7,14 @@ type props = {
 const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
     return (
         <div className="flex flex-col justify-center">
-            <button
-                className="m-4 rounded-xl border-2 border-primary  px-4 py-2"
-                onClick={runCalculationAgain}
-            >
-                再計算する
-            </button>
+            <div className="flex justify-end items-center">
+                <button
+                    className="m-4 rounded-xl border-2 border-primary  px-4 py-2 hover:bg-primary hover:text-white duration-500"
+                    onClick={runCalculationAgain}
+                >
+                    再計算する
+                </button>
+            </div>
             {resultGrouping.map((round, roundIndex) => (
                 <div key={roundIndex}>
                     <div className="result-element-heading">

@@ -235,7 +235,7 @@ const Run: NextPage = () => {
                         )}
                         <button
                             onClick={runCalculation}
-                            className="bg-tertiary py-6 px-12 text-3xl text-white"
+                            className="bg-tertiary py-6 px-12 text-3xl text-white hover:bg-primary hover:text-tertiary duration-300 rounded-md"
                             disabled={!validate}
                         >
                             演算開始
@@ -254,7 +254,6 @@ const Run: NextPage = () => {
                 // nOfAttempts={nOfAttempts}
                 />
             );
-            console.log('ProgressElement');
             break;
         case 'finished':
             returnElement = (
