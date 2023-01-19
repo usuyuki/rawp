@@ -15,16 +15,18 @@ import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
 const Run: NextPage = () => {
+    //参加者名簿のテキストエリアの値(再計算時にtextareaが吹っ飛ぶの防止用)
+    const [rosterRaw, setRosterRaw] = useState<string>('');
     //参加者名簿
     const [roster, setRoster] = useState<string[]>([]);
     //参加人数
     const [nOfPeople, setNOfPeople] = useState<number>(1);
     //グループ数
     const [nOfGroup, setNOfGroup] = useState<number>(1);
+    //人数過不足時のオプション
+    const [excessOrDeficiencyOptionValue, setExcessOrDeficiencyOptionValue] = useState<string>('');
     //グループ分け回数
     const [nOfTimes, setnOfTimes] = useState<number>(1);
-    //試行回数
-    const [nOfAttempts, setNOfAttempts] = useState<number>(5000);
     //フェーズの管理
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
     //グループ分け結果を格納する変数
@@ -34,6 +36,18 @@ const Run: NextPage = () => {
     ///処理実行許可フラグ(useStateが即座に反映されないので、それをうまくするやつ)
     const [runFlag, setRunFlag] = useState<boolean>(false);
 
+    //参加者名簿のテキストエリア更新時の処理
+    const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        //改行ごとに配列に格納、この配列のlengthを利用して人数とtextareaの幅調整も行う大変にSDGsなやつ
+        setRoster(e.target.value.split(/\r\n|\n/));
+        setRosterRaw(e.target.value);
+    };
+
+    //過不足オプションの更新時の処理
+    const updateExcessOrDeficiencyOption = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setExcessOrDeficiencyOptionValue(e.target.value);
+        console.log(e.target.value === 'on' ? 'on' : 'off');
+    };
     /**
      * 参加者名簿から人数を更新
      */
@@ -65,15 +79,6 @@ const Run: NextPage = () => {
             setValidate(true);
         }
     }, [nOfGroup, nOfPeople, nOfTimes]);
-
-    const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        //改行ごとに配列に格納、この配列のlengthを利用して人数とtextareaの幅調整も行う大変にSDGsなやつ
-        setRoster(e.target.value.split(/\r\n|\n/));
-    };
-
-    const updateNOfAttempts = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNOfAttempts(Number(e.target.value));
-    };
     /**
      * nowPhaseの変更
      * ↓
@@ -132,7 +137,12 @@ const Run: NextPage = () => {
                 <div className="counter-element">
                     <FormCard heading="参加者の名前">
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
-                        <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
+                        <textarea
+                            onChange={updateRoster}
+                            rows={nOfPeople}
+                            defaultValue={rosterRaw}
+                            className="overflow-hidden"
+                        ></textarea>
                         <div>{nOfPeople}人</div>
                         {nOfPeople > 255 ? (
                             <p className="text-tertiary">最大人数を超えています！</p>
@@ -174,18 +184,22 @@ const Run: NextPage = () => {
                                 <p>-</p>
                             </button>
                         </div>
-                        {/* <p className="mt-6">人数に過不足がある時の挙動</p>
+                        <p className="mt-6">人数に過不足がある時の挙動</p>
                         <label className="mt-4 inline-flex cursor-pointer flex-col items-center md:flex-row">
-                            <input type="checkbox" value="" className="peer sr-only" />
-                            //↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
-                            //<div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> 
+                            <input
+                                type="checkbox"
+                                onChange={updateExcessOrDeficiencyOption}
+                                className="peer sr-only"
+                            />
+                            {/* ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
+                            <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div>  */}
                             <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
                                 グループ数は変えずに1グループあたりの人数を増やす
                             </span>
                             <span className="ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary">
                                 少ない人数で構成された グループを追加する
                             </span>
-                        </label> */}
+                        </label>
                     </FormCard>
                     <FormCard heading="グループ分けする回数">
                         <div className="flex items-center justify-center">
