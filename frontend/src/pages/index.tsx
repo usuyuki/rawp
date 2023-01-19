@@ -15,11 +15,11 @@ const IndexPage: NextPage = () => {
             <div className="flex justify-center">
                 <PrimaryButton title="さっそく使ってみる" url="/run" />
             </div>
-            <div className="my-12 flex flex-col items-center justify-center">
+            <h2 className="mt-12 text-2xl">サービスによせて🍂</h2>
+            <div className="my-6 flex flex-col items-center justify-center">
                 <div>
-                    <p>複数回のグループ分けで重複を減らしながら行うのはNP困難と呼ばれます。</p>
                     <p>
-                        例えば20人の参加者を5つのグループに分け、グループの中身を変えながら3回交流タイムを設けるとします。
+                        例えば、オンライン歓迎会で20人の参加者を5つのグループに分け、グループの中身を変えながら3回交流タイムを設けるとします。
                     </p>
                     <p>
                         1グループあたり4人のグループで、この時考えられるグループの組み合わせは積の法則を用いて
@@ -45,7 +45,7 @@ const IndexPage: NextPage = () => {
                         このパターンの中で最も重複の少ないものを選ぶ時、仮にすべてを比較した上で一番良い組み合わせを探していたら太陽系が先に寿命を迎えてしまいます。
                     </p>
                     <p className="mt-12">
-                        「ZOOM新歓の交流会でまた同じ人と出会ったんだけど！！」と主催者に不満を言われるの辛くないですか？
+                        「オンライン交流会で何度も同じ人と出会ったんだけど！！」と主催者に不満を言われるの辛くないですか？
                     </p>
                     <p>
                         量子コンピュータじゃないんですから、人力で被らないようにするのは無茶ですよって話です……
