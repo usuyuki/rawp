@@ -25,6 +25,8 @@ const Run: NextPage = () => {
     const [nOfPeople, setNOfPeople] = useState<number>(1);
     //グループ数
     const [nOfGroup, setNOfGroup] = useState<number>(1);
+    //過不足判定フラグ
+    const [isExcessOrDeficiency, setIsExcessOrDeficiency] = useState<boolean>(false);
     //人数過不足時のグループ追加判定
     const [isAddGroup, setIsAddGroup] = useState<boolean>(false);
     //グループ分け回数
@@ -66,6 +68,7 @@ const Run: NextPage = () => {
         if (nOfGroup > nOfPeople) {
             setNOfGroup(nOfPeople);
         }
+        setIsExcessOrDeficiency(nOfPeople % nOfGroup !== 0);
     }, [nOfPeople, nOfGroup]);
     /**
      * バリデーション
@@ -107,7 +110,14 @@ const Run: NextPage = () => {
     useEffect(() => {
         if (runFlag) {
             setResultGrouping(
-                resolveGroupingProblem(nOfPeople, nOfGroup, nOfTimes, roster, isAddGroup),
+                resolveGroupingProblem(
+                    nOfPeople,
+                    nOfGroup,
+                    nOfTimes,
+                    roster,
+                    isAddGroup,
+                    isExcessOrDeficiency,
+                ),
             );
             setNowPhase('finished');
             setRunFlag(false);
@@ -117,7 +127,7 @@ const Run: NextPage = () => {
 
     //演算開始ボタン押下
     const runCalculation = () => {
-        console.log('aaa');
+        console.log('演算開始');
         setNowPhase('calculating');
         window.scrollTo(0, 0);
     };
@@ -160,18 +170,26 @@ const Run: NextPage = () => {
                     <FormCard heading="作成したいグループ数">
                         <div className="flex items-center justify-center">
                             <p className="mx-2 text-6xl ">{nOfGroup}</p>
+                            {/* 過不足調整でグループ数を変える時は+1を出す */}
+                            {isAddGroup && isExcessOrDeficiency ? (
+                                <p className="text-3xl text-tertiary">+1</p>
+                            ) : (
+                                ''
+                            )}
                             <p className="text-2xl">グループ</p>
                         </div>
                         <p>
-                            (1グループあたり
+                            (1グループあたり約
                             {nOfPeople === 0 || nOfGroup == 0
                                 ? '-'
+                                : isAddGroup
+                                ? Math.floor(nOfPeople / (nOfGroup + 1))
                                 : Math.floor(nOfPeople / nOfGroup)}
                             人程度)
                         </p>
                         <div className="flex justify-center">
                             <button
-                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 flex items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfPeople > nOfGroup) {
                                         setNOfGroup(nOfGroup + 1);
@@ -181,14 +199,14 @@ const Run: NextPage = () => {
                                 +
                             </button>
                             <button
-                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 flex items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfGroup > 1) {
                                         setNOfGroup(nOfGroup - 1);
                                     }
                                 }}
                             >
-                                <p>-</p>
+                                -
                             </button>
                         </div>
                         <p className="mt-6">人数に過不足がある時の挙動</p>
@@ -209,6 +227,9 @@ const Run: NextPage = () => {
                                 少ない人数で構成されたグループを追加する
                             </span>
                         </label>
+                        <p className="mt-6 text-xs md:w-1/2">
+                            グループ数に対して人数の過不足がある場合の調整も自動で行いますが、実装上グループの人数が安定しないため、できる限り過不足ない人数調整をおすすめします
+                        </p>
                     </FormCard>
                     <FormCard heading="グループ分けする回数">
                         <div className="flex items-center justify-center">
@@ -225,14 +246,14 @@ const Run: NextPage = () => {
                                 +
                             </button>
                             <button
-                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
+                                className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
                                     if (nOfTimes > 1) {
                                         setNOfTimes(nOfTimes - 1);
                                     }
                                 }}
                             >
-                                <p>-</p>
+                                -
                             </button>
                         </div>
                     </FormCard>

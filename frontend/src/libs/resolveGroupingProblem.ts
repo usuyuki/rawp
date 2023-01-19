@@ -10,11 +10,29 @@ export const resolveGroupingProblem = (
     nOfTimes: number,
     roster: string[],
     isAddGroup: boolean,
+    isExcessOrDeficiency: boolean,
 ): string[][][] => {
     //過不足調整処理
-    const nOfPeopleForCalc = nOfPeople;
-    const nOfGroupForCalc = nOfGroup;
-    const diffFromIdeal = nOfPeople % nOfGroup; //グループ数に対しての過不足
+    let nOfPeopleForCalc = nOfPeople;
+    let nOfGroupForCalc = nOfGroup;
+    //過不足判定フラグ
+    if (isExcessOrDeficiency) {
+        if (isAddGroup) {
+            nOfGroupForCalc += 1;
+            nOfPeopleForCalc = Math.ceil(nOfPeople / nOfGroupForCalc) * nOfGroupForCalc;
+        } else {
+            //デフォルトでは過不足時には人数を足して最後に帳尻合わせる
+            nOfPeopleForCalc = Math.ceil(nOfPeople / nOfGroup) * nOfGroup;
+        }
+
+        /**
+         * rosterをいじっているが、constの変数を引数に渡しているものなので、呼び出し元は変わらない
+         */
+        for (let i = 0; i < nOfPeopleForCalc - nOfPeople; i++) {
+            //空の要素を追加。textareaからの取得で空は除いているので、ユーザー入力と競合しない
+            roster.push('');
+        }
+    }
 
     //乱数用の時間生成
     const timeObj = new Date();
@@ -42,11 +60,20 @@ export const resolveGroupingProblem = (
     resultArray.forEach((byCount, i) => {
         {
             byCount.forEach((byGroup, j) => {
+                //数字→名前の変換
                 byGroup.forEach((byMember, k) => {
                     resultArray[i][j][k] = roster[Number(byMember)];
                 });
+                //帳尻合わせした配列を治す(空要素を消す)
+                console.log(resultArray[i][j]);
+                if (isExcessOrDeficiency) {
+                    resultArray[i][j] = resultArray[i][j].filter((byMember) => {
+                        return byMember !== '';
+                    });
+                }
             });
         }
     });
+
     return resultArray;
 };
