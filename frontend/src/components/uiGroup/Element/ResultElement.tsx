@@ -7,9 +7,9 @@ type props = {
 const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
     return (
         <div className="flex flex-col justify-center">
-            <div className="flex justify-end items-center">
+            <div className="flex items-center justify-end">
                 <button
-                    className="m-4 rounded-xl border-2 border-primary  px-4 py-2 hover:bg-primary hover:text-white duration-500"
+                    className="m-4 rounded-xl border-2 border-primary  px-4 py-2 duration-500 hover:bg-primary hover:text-white"
                     onClick={runCalculationAgain}
                 >
                     再計算する

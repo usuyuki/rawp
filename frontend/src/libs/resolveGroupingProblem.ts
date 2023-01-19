@@ -9,20 +9,31 @@ export const resolveGroupingProblem = (
     nOfGroup: number,
     nOfTimes: number,
     roster: string[],
+    isAddGroup: boolean,
 ): string[][][] => {
+    //過不足調整処理
+    const nOfPeopleForCalc = nOfPeople;
+    const nOfGroupForCalc = nOfGroup;
+    const diffFromIdeal = nOfPeople % nOfGroup; //グループ数に対しての過不足
+
     //乱数用の時間生成
     const timeObj = new Date();
-    const result: string = resolve_by_sa(nOfPeople, nOfGroup, nOfTimes, BigInt(timeObj.getTime()));
+    const result: string = resolve_by_sa(
+        nOfPeopleForCalc,
+        nOfGroupForCalc,
+        nOfTimes,
+        BigInt(timeObj.getTime()),
+    );
 
     //文字列を配列に変換
     const rawArray: string[] = result.split(',');
     //1次元配列から本来の3次元配列に戻す
     const resultArray: string[][][] = [];
     let sliceCounter = 0;
-    const perGroup: number = nOfPeople / nOfGroup;
+    const perGroup: number = nOfPeopleForCalc / nOfGroupForCalc;
     for (let i = 0; i < nOfTimes; i++) {
         const tmpArray: string[][] = [];
-        for (let j = 0; j < nOfGroup; j++) {
+        for (let j = 0; j < nOfGroupForCalc; j++) {
             tmpArray.push(rawArray.slice(sliceCounter, (sliceCounter += perGroup)));
         }
         resultArray.push(tmpArray);

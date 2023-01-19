@@ -16,17 +16,19 @@ type phaseType = 'waiting' | 'calculating' | 'finished';
 
 const Run: NextPage = () => {
     //参加者名簿のテキストエリアの値(再計算時にtextareaが吹っ飛ぶの防止用)
-    const [rosterRaw, setRosterRaw] = useState<string>('');
+    const [rosterTextarea, setRosterTextarea] = useState<string>('');
     //参加者名簿
     const [roster, setRoster] = useState<string[]>([]);
+    //参加者名簿テキストエリアのrow(元々人の数を使っていたが、空改行されるとずれるので別で持つ)
+    const [rosterTextareaRow, setRosterTextareaRow] = useState<number>(1);
     //参加人数
     const [nOfPeople, setNOfPeople] = useState<number>(1);
     //グループ数
     const [nOfGroup, setNOfGroup] = useState<number>(1);
-    //人数過不足時のオプション
-    const [excessOrDeficiencyOptionValue, setExcessOrDeficiencyOptionValue] = useState<string>('');
+    //人数過不足時のグループ追加判定
+    const [isAddGroup, setIsAddGroup] = useState<boolean>(false);
     //グループ分け回数
-    const [nOfTimes, setnOfTimes] = useState<number>(1);
+    const [nOfTimes, setNOfTimes] = useState<number>(1);
     //フェーズの管理
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
     //グループ分け結果を格納する変数
@@ -38,15 +40,18 @@ const Run: NextPage = () => {
 
     //参加者名簿のテキストエリア更新時の処理
     const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        //改行ごとに配列に格納、この配列のlengthを利用して人数とtextareaの幅調整も行う大変にSDGsなやつ
-        setRoster(e.target.value.split(/\r\n|\n/));
-        setRosterRaw(e.target.value);
+        //演算後に復元できる用
+        setRosterTextarea(e.target.value);
+        //textareaの幅調整用
+        setRosterTextareaRow(e.target.value.split(/\r\n|\n/).length);
+        // 空文字は除外
+        setRoster(e.target.value.split(/\r\n|\n/).filter((v) => v !== ''));
     };
 
     //過不足オプションの更新時の処理
     const updateExcessOrDeficiencyOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setExcessOrDeficiencyOptionValue(e.target.value);
-        console.log(e.target.value === 'on' ? 'on' : 'off');
+        //グループ追加を選ぶとtrueになる
+        setIsAddGroup(e.target.checked);
     };
     /**
      * 参加者名簿から人数を更新
@@ -101,7 +106,9 @@ const Run: NextPage = () => {
      */
     useEffect(() => {
         if (runFlag) {
-            setResultGrouping(resolveGroupingProblem(nOfPeople, nOfGroup, nOfTimes, roster));
+            setResultGrouping(
+                resolveGroupingProblem(nOfPeople, nOfGroup, nOfTimes, roster, isAddGroup),
+            );
             setNowPhase('finished');
             setRunFlag(false);
             window.scrollTo(0, 0);
@@ -139,8 +146,8 @@ const Run: NextPage = () => {
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea
                             onChange={updateRoster}
-                            rows={nOfPeople}
-                            defaultValue={rosterRaw}
+                            rows={rosterTextareaRow}
+                            defaultValue={rosterTextarea}
                             className="overflow-hidden"
                         ></textarea>
                         <div>{nOfPeople}人</div>
@@ -190,14 +197,16 @@ const Run: NextPage = () => {
                                 type="checkbox"
                                 onChange={updateExcessOrDeficiencyOption}
                                 className="peer sr-only"
+                                //checked復元用
+                                checked={isAddGroup}
                             />
-                            {/* ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
-                            <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div>  */}
+                            {/* ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念  */}
+                            {/* <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> */}
                             <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
                                 グループ数は変えずに1グループあたりの人数を増やす
                             </span>
                             <span className="ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary">
-                                少ない人数で構成された グループを追加する
+                                少ない人数で構成されたグループを追加する
                             </span>
                         </label>
                     </FormCard>
@@ -210,7 +219,7 @@ const Run: NextPage = () => {
                             <button
                                 className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary pb-1 text-2xl text-white"
                                 onClick={() => {
-                                    setnOfTimes(nOfTimes + 1);
+                                    setNOfTimes(nOfTimes + 1);
                                 }}
                             >
                                 +
@@ -219,7 +228,7 @@ const Run: NextPage = () => {
                                 className="mx-4 my-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-white"
                                 onClick={() => {
                                     if (nOfTimes > 1) {
-                                        setnOfTimes(nOfTimes - 1);
+                                        setNOfTimes(nOfTimes - 1);
                                     }
                                 }}
                             >
@@ -235,7 +244,7 @@ const Run: NextPage = () => {
                         )}
                         <button
                             onClick={runCalculation}
-                            className="bg-tertiary py-6 px-12 text-3xl text-white hover:bg-primary hover:text-tertiary duration-300 rounded-md"
+                            className="rounded-md bg-tertiary py-6 px-12 text-3xl text-white duration-300 hover:bg-primary hover:text-tertiary"
                             disabled={!validate}
                         >
                             演算開始
