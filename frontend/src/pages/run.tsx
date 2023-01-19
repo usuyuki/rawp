@@ -212,7 +212,7 @@ const Run: NextPage = () => {
                             (1グループあたり約
                             {nOfPeople === 0 || nOfGroup == 0
                                 ? '-'
-                                : isAddGroup
+                                : isAddGroup && isExcessOrDeficiency
                                 ? Math.floor(nOfPeople / (nOfGroup + 1))
                                 : Math.floor(nOfPeople / nOfGroup)}
                             人程度)
