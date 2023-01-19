@@ -56,11 +56,11 @@ const Run: NextPage = () => {
     useEffect(() => {
         if (
             nOfPeople > 0 &&
-            nOfPeople < 255 &&
+            nOfPeople <= 255 &&
             nOfGroup > 0 &&
             nOfGroup < nOfPeople &&
             nOfTimes > 0 &&
-            nOfTimes < 255
+            nOfTimes <= 255
         ) {
             setValidate(true);
         }
@@ -134,7 +134,11 @@ const Run: NextPage = () => {
                         <p className="mb-2">参加者名をお一人ずつ改行しながら入力してください</p>
                         <textarea onChange={updateRoster} rows={nOfPeople}></textarea>
                         <div>{nOfPeople}人</div>
-                        <p>※最大人数:255人</p>
+                        {nOfPeople > 255 ? (
+                            <p className="text-tertiary">最大人数を超えています！</p>
+                        ) : (
+                            ''
+                        )}
                     </FormCard>
                     <FormCard heading="作成したいグループ数">
                         <div className="flex items-center justify-center">
@@ -173,8 +177,8 @@ const Run: NextPage = () => {
                         {/* <p className="mt-6">人数に過不足がある時の挙動</p>
                         <label className="mt-4 inline-flex cursor-pointer flex-col items-center md:flex-row">
                             <input type="checkbox" value="" className="peer sr-only" />
-                             ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
-                             <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> 
+                            //↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
+                            //<div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> 
                             <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
                                 グループ数は変えずに1グループあたりの人数を増やす
                             </span>
@@ -213,7 +217,7 @@ const Run: NextPage = () => {
                         {validate ? (
                             <p className="text-primary">バリデーションOK、実行できます！</p>
                         ) : (
-                            <p className="text-tertiary">まだ実行できません。</p>
+                            <p className="text-tertiary">指定の入力を終えると実行できます。</p>
                         )}
                         <button
                             onClick={runCalculation}
