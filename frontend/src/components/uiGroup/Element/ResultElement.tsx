@@ -7,9 +7,8 @@ type props = {
 const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
     return (
         <div className="flex flex-col justify-center">
-            <div className="flex items-center justify-center flex-col">
-                <h2 className="text-2xl md:text-3xl">演算結果</h2>
-                <p className="text-tertiary text-sm">
+            <div className="flex flex-col items-center justify-center">
+                <p className="text-sm text-tertiary">
                     大域最適解をできる限り求めていますが、重複が生じる場合もございます
                 </p>
             </div>

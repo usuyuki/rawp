@@ -33,6 +33,8 @@ const Run: NextPage = () => {
     const [nOfTimes, setNOfTimes] = useState<number>(1);
     //フェーズの管理
     const [nowPhase, setNowPhase] = useState<phaseType>('waiting');
+    //フェーズに合わせたタイトル
+    const [phaseTitle, setPhaseTitle] = useState<string>('複数回のグループ生成');
     //グループ分け結果を格納する変数
     const [resultGrouping, setResultGrouping] = useState<string[][][]>([]);
     //バリデーションフラグ
@@ -87,6 +89,23 @@ const Run: NextPage = () => {
             setValidate(true);
         }
     }, [nOfGroup, nOfPeople, nOfTimes]);
+
+    /**
+     * フェーズに合わせてタイトルを変更
+     */
+    useEffect(() => {
+        switch (nowPhase) {
+            case 'waiting':
+                setPhaseTitle('複数回のグループ生成');
+                break;
+            case 'calculating':
+                setPhaseTitle('計算中');
+                break;
+            case 'finished':
+                setPhaseTitle('演算結果');
+                break;
+        }
+    }, [nowPhase]);
     /**
      * nowPhaseの変更
      * ↓
@@ -102,13 +121,16 @@ const Run: NextPage = () => {
     useEffect(() => {
         if (nowPhase === 'calculating') {
             setRunFlag(true);
+            //本来不要だが、更新が遅延するので明示的に再代入
+            setPhaseTitle('計算中');
         }
     }, [nowPhase]);
     /**
-     * 一度runFlagを挟まないとuseEffectの処理待ちでcalculatingの再レンダリングが走らず
+     * 上のUseEffectで下記を動かすと計算中画面のレンダリングが走らないので、runFlag、nowPhaseにより更新されるPhaseTitleの値が変わったら処理するようにする
      */
     useEffect(() => {
-        if (runFlag) {
+        //runFlagとPhaseTitle2つも比較するのはあまりにも意味がないが、こうすることでほぼ確実に順不同の非同期処理の中で計算処理より先に画面更新を走らせられる
+        if (runFlag && phaseTitle === '計算中') {
             setResultGrouping(
                 resolveGroupingProblem(
                     nOfPeople,
@@ -123,7 +145,16 @@ const Run: NextPage = () => {
             setRunFlag(false);
             window.scrollTo(0, 0);
         }
-    }, [runFlag, isAddGroup, isExcessOrDeficiency, nOfGroup, nOfPeople, nOfTimes, roster]);
+    }, [
+        runFlag,
+        isAddGroup,
+        isExcessOrDeficiency,
+        nOfGroup,
+        nOfPeople,
+        nOfTimes,
+        roster,
+        phaseTitle,
+    ]);
 
     //演算開始ボタン押下
     const runCalculation = () => {
@@ -294,8 +325,8 @@ const Run: NextPage = () => {
             break;
     }
     return (
-        <Layout title="実行">
-            <DescribeH1 heading="複数回のグループ生成" />
+        <Layout title={phaseTitle}>
+            <DescribeH1 heading={phaseTitle} />
             {returnElement}
         </Layout>
     );
