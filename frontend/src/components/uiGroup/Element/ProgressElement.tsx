@@ -6,14 +6,9 @@ type props = {
     nOfGroups: number;
     nOfTimes: number;
     nOfAttempts: number;
+    nowPhase: string;
 };
-const ProgressElement: NextPage<props> = ({
-    roster,
-    nOfPeople,
-    nOfGroups,
-    nOfTimes,
-    nOfAttempts,
-}) => {
+const ProgressElement: NextPage = () => {
     return (
         <div className="flex flex-col items-center justify-center">
             <p className="my-4 text-2xl">計算中</p>

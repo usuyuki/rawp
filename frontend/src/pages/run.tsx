@@ -5,9 +5,10 @@ import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
-import { resolve_by_sa } from '@/wasm/rawpKernel/rawp_kernel.js';
 
 import type { NextPage } from 'next';
+
+import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
 // import { useModal } from 'react-hooks-use-modal';
 // import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
@@ -30,18 +31,29 @@ const Run: NextPage = () => {
     const [resultGrouping, setResultGrouping] = useState<string[][][]>([]);
     //バリデーションフラグ
     const [validate, setValidate] = useState<boolean>(false);
+    ///処理実行許可フラグ(useStateが即座に反映されないので、それをうまくするやつ)
+    const [runFlag, setRunFlag] = useState<boolean>(false);
 
+    /**
+     * 参加者名簿から人数を更新
+     */
     useEffect(() => {
         setNOfPeople(roster.length);
+    }, [roster]);
+    /**
+     * グループ数が参加人数より多い場合はグループ数を参加人数に合わせる
+     */
+    useEffect(() => {
         if (nOfGroup > nOfPeople) {
             setNOfGroup(nOfPeople);
         }
-
-        /**
-         * バリデーション
-         * Rust側でu8にしている都合と現実的に計算できる数の都合で255まで
-         * クライアント簡潔なので厳密なバリデーションは不要、ユーザーに不便ないレベルまでバリデーションはする
-         */
+    }, [nOfPeople, nOfGroup]);
+    /**
+     * バリデーション
+     * Rust側でu8にしている都合と現実的に計算できる数の都合で255まで
+     * クライアント簡潔なので厳密なバリデーションは不要、ユーザーに不便ないレベルまでバリデーションはする
+     */
+    useEffect(() => {
         if (
             nOfPeople > 0 &&
             nOfPeople < 255 &&
@@ -52,7 +64,7 @@ const Run: NextPage = () => {
         ) {
             setValidate(true);
         }
-    }, [roster.length, nOfGroup, nOfPeople, nOfTimes, validate]);
+    }, [nOfGroup, nOfPeople, nOfTimes]);
 
     const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         //改行ごとに配列に格納、この配列のlengthを利用して人数とtextareaの幅調整も行う大変にSDGsなやつ
@@ -62,52 +74,44 @@ const Run: NextPage = () => {
     const updateNOfAttempts = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNOfAttempts(Number(e.target.value));
     };
+    /**
+     * nowPhaseの変更
+     * ↓
+     * 再レンダリング→処理中表示
+     * ↓
+     * グループ分け処理の演算
+     * ↓
+     * 再レンダリング→結果表示
+     *
+     * の順にするための板挟み処理
+     * ※これしないと1つめの再レンダリングがされなくなる
+     */
+    useEffect(() => {
+        if (nowPhase === 'calculating') {
+            setRunFlag(true);
+        }
+    }, [nowPhase]);
+    /**
+     * 一度runFlagを挟まないとuseEffectの処理待ちでcalculatingの再レンダリングが走らず
+     */
+    useEffect(() => {
+        if (runFlag) {
+            setResultGrouping(resolveGroupingProblem(nOfPeople, nOfGroup, nOfTimes, roster));
+            setNowPhase('finished');
+            setRunFlag(false);
+        }
+    }, [runFlag]);
 
     //演算開始ボタン押下
     const runCalculation = () => {
-        if (validate) {
-            setValidate(false);
-            setNowPhase('calculating');
+        console.log('aaa');
+        setNowPhase('calculating');
+    };
 
-            //乱数用の時間生成
-            const timeObj = new Date();
-            const result: string = resolve_by_sa(
-                nOfPeople,
-                nOfGroup,
-                nOfTimes,
-                BigInt(timeObj.getTime()),
-            );
-
-            //文字列を配列に変換
-            const rawArray: string[] = result.split(',');
-            //1次元配列から本来の3次元配列に戻す
-            const resultArray: string[][][] = [];
-            let sliceCounter = 0;
-            const perGroup: number = nOfPeople / nOfGroup;
-            for (let i = 0; i < nOfTimes; i++) {
-                const tmpArray: string[][] = [];
-                for (let j = 0; j < nOfGroup; j++) {
-                    tmpArray.push(rawArray.slice(sliceCounter, (sliceCounter += perGroup)));
-                }
-                resultArray.push(tmpArray);
-            }
-            //人物名配列への変換 配列にする前に最初変換する方式だったが、人物名に名前が入ると壊れるのでこの方式に変更
-            resultArray.forEach((byCount, i) => {
-                {
-                    byCount.forEach((byGroup, j) => {
-                        byGroup.forEach((byMember, k) => {
-                            resultArray[i][j][k] = roster[Number(byMember)];
-                        });
-                    });
-                }
-            });
-
-            setResultGrouping(resultArray);
-            setNowPhase('finished');
-        } else {
-            //事前にバリデーションしてるので大丈夫だが、多重検証
-            alert('入力値が不正です。');
-        }
+    //もう一度計算するボタン
+    const runCalculationAgain = () => {
+        setNowPhase('waiting');
+        setResultGrouping([]);
     };
 
     //モーダル表示用
@@ -221,24 +225,33 @@ const Run: NextPage = () => {
             );
             break;
         case 'calculating':
+            window.scrollTo(0, 0);
             returnElement = (
                 <ProgressElement
-                    roster={roster}
-                    nOfPeople={nOfPeople}
-                    nOfGroups={nOfGroup}
-                    nOfTimes={nOfTimes}
-                    nOfAttempts={nOfAttempts}
+                // roster={roster}
+                // nOfPeople={nOfPeople}
+                // nOfGroups={nOfGroup}
+                // nOfTimes={nOfTimes}
+                // nOfAttempts={nOfAttempts}
                 />
             );
+            console.log('ProgressElement');
             break;
         case 'finished':
-            returnElement = <ResultElement resultGrouping={resultGrouping} />;
+            window.scrollTo(0, 0);
+            returnElement = (
+                <ResultElement
+                    resultGrouping={resultGrouping}
+                    runCalculationAgain={runCalculationAgain}
+                />
+            );
             break;
     }
     return (
         <Layout title="実行">
             <DescribeH1 heading="複数回のグループ生成" />
             {returnElement}
+            {nowPhase === 'calculating' ? <p>計算中</p> : ''}
         </Layout>
     );
 };

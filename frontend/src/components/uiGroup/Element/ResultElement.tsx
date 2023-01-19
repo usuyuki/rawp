@@ -2,10 +2,17 @@ import 'material-symbols';
 import type { NextPage } from 'next';
 type props = {
     resultGrouping: string[][][];
+    runCalculationAgain: () => void;
 };
-const ResultElement: NextPage<props> = ({ resultGrouping }) => {
+const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
     return (
         <div className="flex flex-col justify-center">
+            <button
+                className="m-4 rounded-xl border-2 border-primary  px-4 py-2"
+                onClick={runCalculationAgain}
+            >
+                再計算する
+            </button>
             {resultGrouping.map((round, roundIndex) => (
                 <div key={roundIndex}>
                     <div className="result-element-heading">
