@@ -72,6 +72,18 @@ a {
 a:hover {
     color: var(--primary);
 }
+
+/* Tailwind animation delayないので追加 */
+.animation-delay-250 {
+    animation-delay: 250ms;
+}
+.animation-delay-500 {
+    animation-delay: 500ms;
+}
+.animation-delay-750 {
+    animation-delay: 750ms;
+}
+
 /* input numberで上下のボタンを消す */
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
