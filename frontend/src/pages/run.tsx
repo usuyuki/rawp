@@ -5,11 +5,11 @@ import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
+import { resolve_by_sa } from '@/wasm/rawpKernel/rawp_kernel.js';
 
 import type { NextPage } from 'next';
 
 // import { useModal } from 'react-hooks-use-modal';
-import { resolve_by_sa } from '@/libs/rawpKernel/rawp_kernel.js';
 // import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
@@ -63,6 +63,7 @@ const Run: NextPage = () => {
         setNOfAttempts(Number(e.target.value));
     };
 
+    //演算開始ボタン押下
     const runCalculation = () => {
         if (validate) {
             setValidate(false);
@@ -163,9 +164,18 @@ const Run: NextPage = () => {
                                 <p>-</p>
                             </button>
                         </div>
-                        <p className="mt-6">
-                            実装が間に合わず、現在人数に過不足があると正しく動かない仕様となっております。割り切れるグループ数を選択肢てください
-                        </p>
+                        {/* <p className="mt-6">人数に過不足がある時の挙動</p>
+                        <label className="mt-4 inline-flex cursor-pointer flex-col items-center md:flex-row">
+                            <input type="checkbox" value="" className="peer sr-only" />
+                             ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
+                             <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> 
+                            <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
+                                グループ数は変えずに1グループあたりの人数を増やす
+                            </span>
+                            <span className="ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary">
+                                少ない人数で構成された グループを追加する
+                            </span>
+                        </label> */}
                     </FormCard>
                     <FormCard heading="グループ分けする回数">
                         <div className="flex items-center justify-center">
