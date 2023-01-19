@@ -22,7 +22,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                             {roundIndex + 1}回目
                         </p>
                     </div>
-                    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dotted border-black px-4 py-6 ">
+                    <div className="flex flex-col flex-wrap items-center justify-center rounded-xl border-2 border-dotted border-black px-4 py-6 ">
                         {round.map((group, groupIndex) => (
                             <div key={groupIndex}>
                                 <div className="result-element-heading">
@@ -30,7 +30,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                                         グループ{groupIndex + 1}
                                     </p>
                                 </div>
-                                <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dotted border-primary px-4 py-6 md:flex-row ">
+                                <div className="flex flex-wrap flex-col items-center justify-center rounded-xl border-2 border-dotted border-primary px-4 py-6 md:flex-row ">
                                     {group.map((person, personIndex) => (
                                         <div
                                             key={personIndex}
