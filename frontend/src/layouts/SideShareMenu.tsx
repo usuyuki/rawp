@@ -5,7 +5,7 @@ const SideShareMenu: NextPage = () => {
     return (
         // 位置の指定はこの要素を囲った要素でしている
         <div className="side-share-element">
-            <div className="flex-col items-center justify-center hidden md:flex">
+            <div className="hidden flex-col items-center justify-center md:flex">
                 <p>share</p>
                 <div className="h-16 w-1 bg-black"></div>
                 {/* Twitter */}

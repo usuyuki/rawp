@@ -164,18 +164,18 @@ const Run: NextPage = () => {
                                 <p>-</p>
                             </button>
                         </div>
-                        <p className="mt-6">人数に過不足がある時の挙動</p>
+                        {/* <p className="mt-6">人数に過不足がある時の挙動</p>
                         <label className="mt-4 inline-flex cursor-pointer flex-col items-center md:flex-row">
                             <input type="checkbox" value="" className="peer sr-only" />
-                            {/* ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 */}
-                            {/* <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> */}
+                             ↓トグルはメディアクエリでpeer-checked:after:translate-x-fullを指定できないため、断念 
+                             <div className="order-3 relative w-6 md:w-16 md:h-6 h-16 bg-black rounded-sm peer peer-checked:after:translate-y-full peer-checked:after:md:translate-x-full after:content-[''] after:absolute after:top-0 md:after:-top-1 after:-left-1 md:after:left-0 after:bg-primary after:h-8 after:w-8 after:transition-all "></div> 
                             <span className="ml-3 border p-2 text-sm text-primary peer-checked:border-dotted peer-checked:text-black">
                                 グループ数は変えずに1グループあたりの人数を増やす
                             </span>
                             <span className="ml-3 border border-dotted p-2 text-sm peer-checked:border-solid peer-checked:text-primary">
                                 少ない人数で構成された グループを追加する
                             </span>
-                        </label>
+                        </label> */}
                     </FormCard>
                     <FormCard heading="グループ分けする回数">
                         <div className="flex items-center justify-center">

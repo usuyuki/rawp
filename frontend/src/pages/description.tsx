@@ -1,15 +1,16 @@
+import Image from 'next/image';
+
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import DescribeH2 from '@/components/uiParts/Heading/DescribeH2';
 import Layout from '@/layouts/Layout';
 
 import type { NextPage } from 'next';
-import Image from 'next/image';
 const DescriptionPage: NextPage = () => {
     return (
         <Layout title="仕組み">
             <DescribeH1 heading="仕組み" />
             <DescribeH2 heading="NP困難" />
-            <div className="flex justify-center items-center flex-col">
+            <div className="flex flex-col items-center justify-center">
                 <div>
                     <p>複数回のグループ分けで重複を減らしながら行うのはNP困難と呼ばれます。</p>
                     <p>
@@ -22,7 +23,7 @@ const DescriptionPage: NextPage = () => {
                         src="/img/description/calculation_of_group_combinations.svg"
                         width={600}
                         height={20}
-                        className="mx-auto mx-2 my-6"
+                        className="mx-auto my-6 px-2"
                         alt="グループの組み合わせの計算数式"
                     />
                     <p>より305540235000通りの組み合わせが考えられます。</p>
@@ -31,7 +32,7 @@ const DescriptionPage: NextPage = () => {
                         src="/img/description/calculating_multiple_choices.svg"
                         width={300}
                         height={20}
-                        className="mx-auto mx-2 my-6"
+                        className="mx-auto my-6 px-2"
                         alt="グループの選び方の計算数式"
                     />
                     <p>より約40溝(穣の後、澗の前の数の単位)の選び方が存在します。</p>
@@ -57,7 +58,7 @@ const DescriptionPage: NextPage = () => {
                 </div>
             </div>
             <DescribeH2 heading="焼きなまし法" />
-            <div className="flex justify-center items-center flex-col">
+            <div className="flex flex-col items-center justify-center">
                 <div>
                     <p>
                         RAWPでは焼きなまし法を用いることで、複数回の重複の少ないグループ分けを実現します。
@@ -71,7 +72,7 @@ const DescriptionPage: NextPage = () => {
                 </div>
             </div>
             <DescribeH2 heading="WebAssembly" />
-            <div className="flex justify-center items-center flex-col mb-20">
+            <div className="mb-20 flex flex-col items-center justify-center">
                 <div>
                     <p>WebAssemblyはモダンブラウザで動くパフォーマンスの高い言語です。</p>
                     <p>
