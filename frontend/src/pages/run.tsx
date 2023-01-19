@@ -99,6 +99,7 @@ const Run: NextPage = () => {
             setResultGrouping(resolveGroupingProblem(nOfPeople, nOfGroup, nOfTimes, roster));
             setNowPhase('finished');
             setRunFlag(false);
+            window.scrollTo(0, 0);
         }
     }, [runFlag]);
 
@@ -106,6 +107,7 @@ const Run: NextPage = () => {
     const runCalculation = () => {
         console.log('aaa');
         setNowPhase('calculating');
+        window.scrollTo(0, 0);
     };
 
     //もう一度計算するボタン
@@ -225,7 +227,6 @@ const Run: NextPage = () => {
             );
             break;
         case 'calculating':
-            window.scrollTo(0, 0);
             returnElement = (
                 <ProgressElement
                 // roster={roster}
@@ -238,7 +239,6 @@ const Run: NextPage = () => {
             console.log('ProgressElement');
             break;
         case 'finished':
-            window.scrollTo(0, 0);
             returnElement = (
                 <ResultElement
                     resultGrouping={resultGrouping}
@@ -251,7 +251,6 @@ const Run: NextPage = () => {
         <Layout title="実行">
             <DescribeH1 heading="複数回のグループ生成" />
             {returnElement}
-            {nowPhase === 'calculating' ? <p>計算中</p> : ''}
         </Layout>
     );
 };
