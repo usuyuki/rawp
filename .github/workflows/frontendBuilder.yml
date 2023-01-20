@@ -28,8 +28,6 @@ jobs:
 
       - name: build
         run: cd frontend && yarn build
-        env:
-          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
 
       - name: export
         run: cd frontend && yarn export

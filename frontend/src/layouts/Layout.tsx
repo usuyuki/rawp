@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Script from 'next/script';
 
 import Footer from '@/layouts/Footer';
 import Header from '@/layouts/Header';
@@ -45,6 +46,19 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                 />
                 <link rel="icon" type="image/png" href="/img/favicon/icon-192x192.png" />
             </Head>
+            <Script
+                src="https://www.googletagmanager.com/gtag/js?id=G-J7JHJXHKX3"
+                strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){window.dataLayer.push(arguments);}
+                        gtag('js', new Date());
+
+                        gtag('config', 'G-J7JHJXHKX3');
+                    `}
+            </Script>
             <div className="fixed inset-y-0 right-4 ">
                 <SideShareMenu />
             </div>
