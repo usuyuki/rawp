@@ -21,4 +21,4 @@ services:
       - ./frontend:/frontend
     environment:
       - WATCHPACK_POLLING=true
-    command: sh -c "yarn dev"
+    command: sh -c "pnpm dev"
