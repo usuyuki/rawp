@@ -5,10 +5,10 @@ import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
+import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
 import type { NextPage } from 'next';
 
-import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
 // import { useModal } from 'react-hooks-use-modal';
 // import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
@@ -191,6 +191,9 @@ const Run: NextPage = () => {
                             className="overflow-hidden"
                         ></textarea>
                         <div>{nOfPeople}人</div>
+                        <p className="text-primary">
+                            人数を固定したい場合は「4.オプション」より選択できます
+                        </p>
                         {nOfPeople > 255 ? (
                             <p className="text-tertiary">最大人数を超えています！</p>
                         ) : (
@@ -286,6 +289,29 @@ const Run: NextPage = () => {
                                 -
                             </button>
                         </div>
+                    </FormCard>
+                    <FormCard heading="オプション">
+                        <p className="text-center">グループのリーダーを設定する</p>
+                        <form className="flex flex-col justify-center">
+                            {roster.map((person, personIndex) => (
+                                <div key={personIndex}>
+                                    <input
+                                        type="checkbox"
+                                        name={'person-' + personIndex}
+                                        value={personIndex}
+                                    />
+                                    <label
+                                        htmlFor={'person-' + personIndex}
+                                        className="flex items-center justify-center"
+                                    >
+                                        <span className="material-symbols-outlined text-3xl">
+                                            person
+                                        </span>
+                                        <h3 className="px-4 pb-2 text-2xl md:text-xl ">{person}</h3>
+                                    </label>
+                                </div>
+                            ))}
+                        </form>
                     </FormCard>
                     <div className="my-6 flex flex-col items-center justify-center">
                         {validate ? (
