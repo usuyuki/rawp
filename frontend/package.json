@@ -12,6 +12,9 @@
         "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}"
     },
     "dependencies": {
+        "@dnd-kit/core": "^6.0.7",
+        "@dnd-kit/sortable": "^7.0.2",
+        "@dnd-kit/utilities": "^3.2.1",
         "@next/font": "13.1.1",
         "@types/node": "18.11.18",
         "@types/react": "18.0.26",
