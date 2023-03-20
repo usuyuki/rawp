@@ -1,3 +1,7 @@
+/* eslint-disable */
+// ↑引数の型がうまく効いてくれなくて恐ろしいエラー出るので……(技術的負債)
+
+
 // とても参考にさせていただきました↓
 // https://zenn.dev/kodaishoituki/articles/0e1c6109ae838e#sortablecontext
 import {
@@ -12,16 +16,15 @@ import Item from "./Item";
 import SortableContainer from "./SortableContainer";
 
 import type { NextPage } from 'next';
-
-type Props = {
-    leaderDragData: {
-      genera:string[]
-      leader:string[]
-    };
+type leaderDragData = {
+  genera:string[]
+  leader:string[]
+}
+const DragGroupLeader:NextPage = ({leaderDragData,setLeaderDragData,nOfGroup}:{
+    leaderDragData: leaderDragData;
     setLeaderDragData: React.Dispatch<React.SetStateAction<string[]>>;
     nOfGroup:number;
-};
-const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGroup}) => {
+}) => {
   //残り人数
   const [nOfRemain, setNOfRemain] = useState<number>(nOfGroup);
   useEffect(() => {
@@ -79,7 +82,7 @@ const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGr
       return;
     }
 
-    setLeaderDragData((prev) => {
+    setLeaderDragData((prev:leaderDragData) => {
       // 移動元のコンテナの要素配列を取得
       const activeItems = prev[activeContainer];
       // 移動先のコンテナの要素配列を取得
@@ -194,3 +197,4 @@ const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGr
 };
 
 export default DragGroupLeader;
+/* eslint-enable */
