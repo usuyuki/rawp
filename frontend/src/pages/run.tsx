@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import FormCard from '@/components/uiGroup/Card/FormCard';
+import DragGroupLeader from '@/components/uiGroup/DnD/DragGroupLeader';
 import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
@@ -42,6 +43,17 @@ const Run: NextPage = () => {
     ///処理実行許可フラグ(useStateが即座に反映されないので、それをうまくするやつ)
     const [runFlag, setRunFlag] = useState<boolean>(false);
 
+    //リーダー設定オプション
+    const [isEnableLeader, setIsEnableLeader] = useState<boolean>(false);
+    //DnDで入れる名簿
+    const [leaderDragData, setLeaderDragData] = useState<{
+    [key: string]: string[];
+  }>({
+    general: [],
+    leader: [],
+  });
+    
+    
     //参加者名簿のテキストエリア更新時の処理
     const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         //演算後に復元できる用
@@ -57,12 +69,22 @@ const Run: NextPage = () => {
         //グループ追加を選ぶとtrueになる
         setIsAddGroup(e.target.checked);
     };
+    
+    const updateIsEnableLeader = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsEnableLeader(e.target.checked);
+    };
     /**
      * 参加者名簿から人数を更新
      */
     useEffect(() => {
         setNOfPeople(roster.length);
-    }, [roster]);
+        setLeaderDragData({
+                general: roster,
+                leader: [],
+            });
+        //オプションは2人から出てくるので、人数減ったらオプションも無効化する
+        (nOfPeople > 2 && nOfGroup > 1) ? "": setIsEnableLeader(false);
+    }, [roster,nOfGroup,nOfPeople]);
     /**
      * グループ数が参加人数より多い場合はグループ数を参加人数に合わせる
      */
@@ -86,9 +108,18 @@ const Run: NextPage = () => {
             nOfTimes > 0 &&
             nOfTimes <= 255
         ) {
-            setValidate(true);
+            //オプション有効時のチェック
+            if(!isEnableLeader){
+                setValidate(true);
+            }else if(leaderDragData.leader.length === nOfGroup){
+                setValidate(true);
+            }else{
+                setValidate(false);
+            }
+        }else{
+            setValidate(false);
         }
-    }, [nOfGroup, nOfPeople, nOfTimes]);
+    }, [nOfGroup, nOfPeople, nOfTimes,isEnableLeader,leaderDragData]);
 
     /**
      * フェーズに合わせてタイトルを変更
@@ -192,7 +223,7 @@ const Run: NextPage = () => {
                         ></textarea>
                         <div>{nOfPeople}人</div>
                         <p className="text-primary">
-                            人数を固定したい場合は「4.オプション」より選択できます
+                            特定の人物を固定したい場合は、すべて入力後「4.オプション」より選択できます
                         </p>
                         {nOfPeople > 255 ? (
                             <p className="text-tertiary">最大人数を超えています！</p>
@@ -291,27 +322,28 @@ const Run: NextPage = () => {
                         </div>
                     </FormCard>
                     <FormCard heading="オプション">
-                        <p className="text-center">グループのリーダーを設定する</p>
-                        <form className="flex flex-col justify-center">
-                            {roster.map((person, personIndex) => (
-                                <div key={personIndex}>
-                                    <input
-                                        type="checkbox"
-                                        name={'person-' + personIndex}
-                                        value={personIndex}
-                                    />
-                                    <label
-                                        htmlFor={'person-' + personIndex}
-                                        className="flex items-center justify-center"
-                                    >
-                                        <span className="material-symbols-outlined text-3xl">
-                                            person
-                                        </span>
-                                        <h3 className="px-4 pb-2 text-2xl md:text-xl ">{person}</h3>
-                                    </label>
-                                </div>
-                            ))}
-                        </form>
+                        {(nOfPeople > 2 && nOfGroup > 1 ) ? (
+                            <>
+                        <label className="">
+                            <input
+                                type="checkbox"
+                                onChange={updateIsEnableLeader}
+                                className="peer sr-only"
+                                //checked復元用
+                                checked={isEnableLeader}
+                            />
+                        <p className="cursor-pointer rounded-xl p-2 text-center peer-checked:bg-primary peer-checked:text-white">グループのリーダーを設定する</p>
+                            
+                        </label>
+                        {isEnableLeader ? <DragGroupLeader 
+                    leaderDragData={leaderDragData}
+                    setLeaderDragData={setLeaderDragData}
+                    nOfGroup={nOfGroup}
+                         />:""}
+                            </>
+                        ):(
+                        <p className="text-center">オプションは人数やグループの設定内容に応じて表示されます</p>
+                        )}
                     </FormCard>
                     <div className="my-6 flex flex-col items-center justify-center">
                         {validate ? (
