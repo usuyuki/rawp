@@ -2,9 +2,10 @@ import 'material-symbols';
 import type { NextPage } from 'next';
 type props = {
     resultGrouping: string[][][];
+    readers: string[];
     runCalculationAgain: () => void;
 };
-const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain }) => {
+const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain, readers }) => {
     return (
         <div className="flex flex-col justify-center">
             <div className="flex flex-col items-center justify-center">
@@ -36,7 +37,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain })
                                             <span className="material-symbols-outlined text-3xl">
                                                 person
                                             </span>
-                                            <h3 className="px-4 pb-2 text-2xl md:text-xl ">
+                                            <h3 className={"px-4 pb-2 text-2xl md:text-xl "+(readers.includes(person) ? "text-secondary":"")}>
                                                 {person}
                                             </h3>
                                         </div>

@@ -5,35 +5,39 @@
 
 import { resolve_by_sa } from '@/wasm/rawpKernel/rawp_kernel.js';
 export const resolveGroupingProblem = (
-    nOfPeople: number,
+    nOfGeneralPeople: number,///ここも一般ユーザーの人数
     nOfGroup: number,
     nOfTimes: number,
-    roster: string[],
+    generalRoster: string[],//ここは処理を省くために、一般ーザーの配列を入れる
     isAddGroup: boolean,
     isExcessOrDeficiency: boolean,
+    leaderDragDataLeaders:string[],
 ): string[][][] => {
+    // リーダー設定があるときはリーダー人数分人を減らすことで後でリーダーを固定できるようにする
+
     //過不足調整処理
-    let nOfPeopleForCalc = nOfPeople;
+    let nOfPeopleForCalc = nOfGeneralPeople;
     let nOfGroupForCalc = nOfGroup;
+    
     //過不足判定フラグ
     if (isExcessOrDeficiency) {
         if (isAddGroup) {
             nOfGroupForCalc += 1;
-            nOfPeopleForCalc = Math.ceil(nOfPeople / nOfGroupForCalc) * nOfGroupForCalc;
+            nOfPeopleForCalc = Math.ceil(nOfGeneralPeople / nOfGroupForCalc) * nOfGroupForCalc;
         } else {
             //デフォルトでは過不足時には人数を足して最後に帳尻合わせる
-            nOfPeopleForCalc = Math.ceil(nOfPeople / nOfGroup) * nOfGroup;
+            nOfPeopleForCalc = Math.ceil(nOfGeneralPeople / nOfGroup) * nOfGroup;
         }
 
         /**
-         * rosterをいじっているが、constの変数を引数に渡しているものなので、呼び出し元は変わらない
+         * generalRosterをいじっているが、constの変数を引数に渡しているものなので、呼び出し元は変わらない
          */
-        for (let i = 0; i < nOfPeopleForCalc - nOfPeople; i++) {
+        for (let i = 0; i < nOfPeopleForCalc - nOfGeneralPeople; i++) {
             //空の要素を追加。textareaからの取得で空は除いているので、ユーザー入力と競合しない
-            roster.push('');
+            generalRoster.push('');
         }
     }
-
+    
     //乱数用の時間生成
     const timeObj = new Date();
     const result: string = resolve_by_sa(
@@ -62,7 +66,7 @@ export const resolveGroupingProblem = (
             byCount.forEach((byGroup, j) => {
                 //数字→名前の変換
                 byGroup.forEach((byMember, k) => {
-                    resultArray[i][j][k] = roster[Number(byMember)];
+                    resultArray[i][j][k] = generalRoster[Number(byMember)];
                 });
                 //帳尻合わせした配列を治す(空要素を消す)
                 if (isExcessOrDeficiency) {
@@ -73,6 +77,15 @@ export const resolveGroupingProblem = (
             });
         }
     });
+    //リーダー設定があるときは各回の2次元配列にリーダーを足していく
+    if (leaderDragDataLeaders.length > 0) {
+        resultArray.forEach((byCount, i) => {
+            byCount.forEach((byGroup, j) => {
+                //リーダーを先頭に追加
+                resultArray[i][j].unshift(leaderDragDataLeaders[j]);
+            });
+        });
+    }
 
     return resultArray;
 };

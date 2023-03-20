@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 
 import FormCard from '@/components/uiGroup/Card/FormCard';
+import DragGroupLeader from '@/components/uiGroup/DnD/DragGroupLeader';
 import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
+import { isDuplicateArray } from '@/libs/isDuplicateArray';
+import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
 import type { NextPage } from 'next';
 
-import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
-// import { useModal } from 'react-hooks-use-modal';
+// import { useModal } fromi 'react-hooks-use-modal';
 // import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
@@ -42,6 +44,17 @@ const Run: NextPage = () => {
     ///処理実行許可フラグ(useStateが即座に反映されないので、それをうまくするやつ)
     const [runFlag, setRunFlag] = useState<boolean>(false);
 
+    //リーダー設定オプション
+    const [isEnableLeader, setIsEnableLeader] = useState<boolean>(false);
+    //DnDで入れる名簿
+    const [leaderDragData, setLeaderDragData] = useState<{
+    [key: string]: string[];
+  }>({
+    general: [],
+    leader: [],
+  });
+    
+    
     //参加者名簿のテキストエリア更新時の処理
     const updateRoster = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         //演算後に復元できる用
@@ -57,12 +70,24 @@ const Run: NextPage = () => {
         //グループ追加を選ぶとtrueになる
         setIsAddGroup(e.target.checked);
     };
+    
+    const updateIsEnableLeader = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsEnableLeader(e.target.checked);
+    };
     /**
      * 参加者名簿から人数を更新
      */
     useEffect(() => {
         setNOfPeople(roster.length);
-    }, [roster]);
+        setLeaderDragData({
+                general: roster,
+                leader: [],
+            });
+        //オプションは2人から出てくるので、人数減ったらオプションも無効化する
+        (nOfPeople > 2 && nOfGroup > 1) ? "": setIsEnableLeader(false);
+        //同じ名前の人がいるとぶっ壊れるので無効化する
+        isDuplicateArray(roster) ? setValidate(false):"";
+    }, [roster,nOfGroup,nOfPeople]);
     /**
      * グループ数が参加人数より多い場合はグループ数を参加人数に合わせる
      */
@@ -84,11 +109,21 @@ const Run: NextPage = () => {
             nOfGroup > 0 &&
             nOfGroup < nOfPeople &&
             nOfTimes > 0 &&
-            nOfTimes <= 255
+            nOfTimes <= 255 &&
+            !isDuplicateArray(roster)
         ) {
-            setValidate(true);
+            //オプション有効時のチェック
+            if(!isEnableLeader){
+                setValidate(true);
+            }else if(leaderDragData.leader.length === (isAddGroup && isExcessOrDeficiency?(nOfGroup+1):nOfGroup) ){
+                setValidate(true);
+            }else{
+                setValidate(false);
+            }
+        }else{
+            setValidate(false);
         }
-    }, [nOfGroup, nOfPeople, nOfTimes]);
+    }, [roster,nOfGroup, nOfPeople, nOfTimes,isEnableLeader,leaderDragData,isAddGroup,isExcessOrDeficiency]);
 
     /**
      * フェーズに合わせてタイトルを変更
@@ -133,12 +168,13 @@ const Run: NextPage = () => {
         if (runFlag && phaseTitle === '計算中') {
             setResultGrouping(
                 resolveGroupingProblem(
-                    nOfPeople,
+                    leaderDragData.general.length,
                     nOfGroup,
                     nOfTimes,
-                    roster,
+                    leaderDragData.general,
                     isAddGroup,
                     isExcessOrDeficiency,
+                    leaderDragData.leader,
                 ),
             );
             setNowPhase('finished');
@@ -154,6 +190,8 @@ const Run: NextPage = () => {
         nOfTimes,
         roster,
         phaseTitle,
+        isEnableLeader,
+        leaderDragData,
     ]);
 
     //演算開始ボタン押下
@@ -191,8 +229,16 @@ const Run: NextPage = () => {
                             className="overflow-hidden"
                         ></textarea>
                         <div>{nOfPeople}人</div>
+                        <p className="text-primary">
+                            特定の人物を固定したい場合は、すべて入力後「4.オプション」より選択できます
+                        </p>
                         {nOfPeople > 255 ? (
                             <p className="text-tertiary">最大人数を超えています！</p>
+                        ) : (
+                            ''
+                        )}
+                        {isDuplicateArray(roster) ? (
+                            <p className="text-tertiary">同じ名前の人は設定できません！</p>
                         ) : (
                             ''
                         )}
@@ -287,6 +333,30 @@ const Run: NextPage = () => {
                             </button>
                         </div>
                     </FormCard>
+                    <FormCard heading="オプション">
+                        {(nOfPeople > 2 && nOfGroup > 1 ) ? (
+                            <>
+                        <label className="">
+                            <input
+                                type="checkbox"
+                                onChange={updateIsEnableLeader}
+                                className="peer sr-only"
+                                //checked復元用
+                                checked={isEnableLeader}
+                            />
+                        <p className="cursor-pointer rounded-xl p-2 text-center peer-checked:bg-primary peer-checked:text-white">グループのリーダーを設定する</p>
+                            
+                        </label>
+                        {isEnableLeader ? <DragGroupLeader 
+                    leaderDragData={leaderDragData}
+                    setLeaderDragData={setLeaderDragData}
+                    nOfGroup={isAddGroup && isExcessOrDeficiency?(nOfGroup+1):nOfGroup}
+                         />:""}
+                            </>
+                        ):(
+                        <p className="text-center">オプションは人数やグループの設定内容に応じて表示されます</p>
+                        )}
+                    </FormCard>
                     <div className="my-6 flex flex-col items-center justify-center">
                         {validate ? (
                             <p className="text-primary">バリデーションOK、実行できます🥳</p>
@@ -319,6 +389,7 @@ const Run: NextPage = () => {
             returnElement = (
                 <ResultElement
                     resultGrouping={resultGrouping}
+                    readers={leaderDragData.leader}
                     runCalculationAgain={runCalculationAgain}
                 />
             );
