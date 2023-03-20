@@ -1,5 +1,11 @@
+const withPWA = require('next-pwa')({
+  dest: 'public',
+      register: true,
+    skipWaiting: true,
+})
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withPWA({
     reactStrictMode: true,
     swcMinify: true,
     optimizeFonts: true,
@@ -14,6 +20,6 @@ const nextConfig = {
             (isServer ? '../' : '') + 'static/wasm/webassembly.wasm';
         return config;
     },
-};
+});
 
 module.exports = nextConfig;

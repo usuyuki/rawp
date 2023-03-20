@@ -38,7 +38,9 @@ const Layout: NextPage<Props> = ({ children, title, description }) => {
                 <meta name="twitter:card" content="summary" />
                 <meta name="twitter:site" content="@usuyuki26" />
                 <meta name="twitter:creator" content="@usuyuki26" />
-
+                
+                <link rel="manifest" href="/manifest.json" />
+                <meta name="theme-color" content="#3da9fc" />
                 <link
                     rel="apple-touch-icon"
                     type="image/png"
