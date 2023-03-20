@@ -9,6 +9,7 @@ import Layout from '@/layouts/Layout';
 import { isDuplicateArray } from '@/libs/isDuplicateArray';
 import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
+import type { LeaderDragDataType } from "@/types/leaderDragDataType";
 import type { NextPage } from 'next';
 
 
@@ -47,9 +48,7 @@ const Run: NextPage = () => {
     //リーダー設定オプション
     const [isEnableLeader, setIsEnableLeader] = useState<boolean>(false);
     //DnDで入れる名簿
-    const [leaderDragData, setLeaderDragData] = useState<{
-    [key: string]: string[];
-  }>({
+    const [leaderDragData, setLeaderDragData] = useState<LeaderDragDataType>({
     general: [],
     leader: [],
   });

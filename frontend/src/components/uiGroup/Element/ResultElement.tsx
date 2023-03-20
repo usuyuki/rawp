@@ -34,10 +34,10 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain, r
                                             key={personIndex}
                                             className="flex items-center justify-center"
                                         >
-                                            <span className="material-symbols-outlined text-3xl">
+                                            <span className={"material-symbols-outlined text-3xl "+(readers.includes(person) ? "text-primary":"")}>
                                                 person
                                             </span>
-                                            <h3 className={"px-4 pb-2 text-2xl md:text-xl "+(readers.includes(person) ? "text-secondary":"")}>
+                                            <h3 className={"px-4 pb-2 text-2xl md:text-xl "+(readers.includes(person) ? "text-primary":"")}>
                                                 {person}
                                             </h3>
                                         </div>

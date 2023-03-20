@@ -2,7 +2,7 @@ import { UniqueIdentifier } from "@dnd-kit/core";
 
 const Item = ({ id }: { id: UniqueIdentifier }) => {
   return (
-    <div className="my-2.5 flex h-[50px] w-full items-center justify-center rounded-lg border border-black">
+    <div className="m-2 rounded-xl border-2 p-2">
                                         <span className="material-symbols-outlined text-3xl">
                                             person
                                         </span>
