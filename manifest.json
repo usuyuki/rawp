@@ -4,8 +4,8 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "usuyuki",
-    "short_name": "usuyuki",
+    "name": "RAWP",
+    "short_name": "RAWP",
     "icons": [
         {
             "src": "img/favicon/icon-192x192.png",
