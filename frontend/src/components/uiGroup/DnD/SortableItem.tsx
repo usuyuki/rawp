@@ -11,7 +11,6 @@ const SortableItem = ({ id }: { id: UniqueIdentifier }) => {
   return (
     <div
       ref={setNodeRef}
-      className="flex"
       style={{ transform: CSS.Transform.toString(transform), transition }}
       {...attributes}
       {...listeners}

@@ -1,5 +1,5 @@
-/* eslint-disable */
-// ↑引数の型がうまく効いてくれなくて恐ろしいエラー出るので……(技術的負債)
+// ↑引数の型がうまく効いてくれないが、今直す時間がないため一旦放置
+/** @todo このファイルがどうやっても型がうまくつかないので原因を探る */
 
 
 // とても参考にさせていただきました↓
@@ -15,16 +15,14 @@ import React, { useEffect, useState } from "react";
 import Item from "./Item";
 import SortableContainer from "./SortableContainer";
 
+import type { LeaderDragDataType } from "@/types/leaderDragDataType";
 import type { NextPage } from 'next';
-type leaderDragData = {
-  genera:string[]
-  leader:string[]
-}
-const DragGroupLeader:NextPage = ({leaderDragData,setLeaderDragData,nOfGroup}:{
-    leaderDragData: leaderDragData;
-    setLeaderDragData: React.Dispatch<React.SetStateAction<string[]>>;
+type Props = {
+    leaderDragData: LeaderDragDataType;
+    setLeaderDragData: React.Dispatch<React.SetStateAction<LeaderDragDataType>>;
     nOfGroup:number;
-}) => {
+}
+const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGroup}) => {
   //残り人数
   const [nOfRemain, setNOfRemain] = useState<number>(nOfGroup);
   useEffect(() => {
@@ -82,7 +80,7 @@ const DragGroupLeader:NextPage = ({leaderDragData,setLeaderDragData,nOfGroup}:{
       return;
     }
 
-    setLeaderDragData((prev:leaderDragData) => {
+    setLeaderDragData((prev:LeaderDragDataType) => {
       // 移動元のコンテナの要素配列を取得
       const activeItems = prev[activeContainer];
       // 移動先のコンテナの要素配列を取得
@@ -165,9 +163,8 @@ const DragGroupLeader:NextPage = ({leaderDragData,setLeaderDragData,nOfGroup}:{
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
-        className="flex flex-row"
       >
-        <div className="w-full md:w-1/2">
+        <div className="w-1/2">
   <p className="text-center">{leaderDragData.general.length}人</p>
         <SortableContainer
           id="general"
@@ -175,7 +172,7 @@ const DragGroupLeader:NextPage = ({leaderDragData,setLeaderDragData,nOfGroup}:{
           label="一般参加者"
         />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-1/2">
 {nOfRemain > 0 ?(
   <p className="text-center text-tertiary">あと{nOfRemain}人追加してください!</p>
 ):nOfRemain == 0 ?(
