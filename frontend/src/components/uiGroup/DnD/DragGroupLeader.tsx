@@ -1,3 +1,5 @@
+// とても参考にさせていただきました↓
+// https://zenn.dev/kodaishoituki/articles/0e1c6109ae838e#sortablecontext
 import {
   closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor,
   PointerSensor, UniqueIdentifier, useSensor,
@@ -153,7 +155,7 @@ const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGr
     setActiveId(undefined);
   };
   return (
-    <div className="flex flex-wrap w-full">
+    <div className="flex w-full flex-wrap">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -172,11 +174,11 @@ const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGr
         </div>
         <div className="w-full md:w-1/2">
 {nOfRemain > 0 ?(
-  <p className="text-center">あと{nOfRemain}人追加してください!</p>
+  <p className="text-center text-tertiary">あと{nOfRemain}人追加してください!</p>
 ):nOfRemain == 0 ?(
-  <p className="text-center">ありがとうございました！</p>
+  <p className="text-center text-secondary">ありがとうございました！</p>
 ):(
-  <p className="text-center">あと{nOfRemain * -1}人除外してください!</p>
+  <p className="text-center text-tertiary">あと{nOfRemain * -1}人除外してください!</p>
 )}
         <SortableContainer
           id="leader"

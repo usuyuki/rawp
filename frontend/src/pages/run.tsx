@@ -6,12 +6,13 @@ import ProgressElement from '@/components/uiGroup/Element/ProgressElement';
 import ResultElement from '@/components/uiGroup/Element/ResultElement';
 import DescribeH1 from '@/components/uiParts/Heading/DescribeH1';
 import Layout from '@/layouts/Layout';
+import { isDuplicateArray } from '@/libs/isDuplicateArray';
 import { resolveGroupingProblem } from '@/libs/resolveGroupingProblem';
 
 import type { NextPage } from 'next';
 
 
-// import { useModal } from 'react-hooks-use-modal';
+// import { useModal } fromi 'react-hooks-use-modal';
 // import { resolve_by_sa } from '@/libs/rawp_kernel_bg.wasm';//w型がなぜかぶっ壊れてるのでこの読み込みだと事故る issues→https://github.com/rustwasm/wasm-bindgen/issues/2117
 type phaseType = 'waiting' | 'calculating' | 'finished';
 
@@ -84,6 +85,8 @@ const Run: NextPage = () => {
             });
         //オプションは2人から出てくるので、人数減ったらオプションも無効化する
         (nOfPeople > 2 && nOfGroup > 1) ? "": setIsEnableLeader(false);
+        //同じ名前の人がいるとぶっ壊れるので無効化する
+        isDuplicateArray(roster) ? setValidate(false):"";
     }, [roster,nOfGroup,nOfPeople]);
     /**
      * グループ数が参加人数より多い場合はグループ数を参加人数に合わせる
@@ -106,12 +109,13 @@ const Run: NextPage = () => {
             nOfGroup > 0 &&
             nOfGroup < nOfPeople &&
             nOfTimes > 0 &&
-            nOfTimes <= 255
+            nOfTimes <= 255 &&
+            !isDuplicateArray(roster)
         ) {
             //オプション有効時のチェック
             if(!isEnableLeader){
                 setValidate(true);
-            }else if(leaderDragData.leader.length === nOfGroup){
+            }else if(leaderDragData.leader.length === (isAddGroup && isExcessOrDeficiency?(nOfGroup+1):nOfGroup) ){
                 setValidate(true);
             }else{
                 setValidate(false);
@@ -119,7 +123,7 @@ const Run: NextPage = () => {
         }else{
             setValidate(false);
         }
-    }, [nOfGroup, nOfPeople, nOfTimes,isEnableLeader,leaderDragData]);
+    }, [roster,nOfGroup, nOfPeople, nOfTimes,isEnableLeader,leaderDragData,isAddGroup,isExcessOrDeficiency]);
 
     /**
      * フェーズに合わせてタイトルを変更
@@ -164,12 +168,13 @@ const Run: NextPage = () => {
         if (runFlag && phaseTitle === '計算中') {
             setResultGrouping(
                 resolveGroupingProblem(
-                    nOfPeople,
+                    leaderDragData.general.length,
                     nOfGroup,
                     nOfTimes,
-                    roster,
+                    leaderDragData.general,
                     isAddGroup,
                     isExcessOrDeficiency,
+                    leaderDragData.leader,
                 ),
             );
             setNowPhase('finished');
@@ -185,6 +190,8 @@ const Run: NextPage = () => {
         nOfTimes,
         roster,
         phaseTitle,
+        isEnableLeader,
+        leaderDragData,
     ]);
 
     //演算開始ボタン押下
@@ -227,6 +234,11 @@ const Run: NextPage = () => {
                         </p>
                         {nOfPeople > 255 ? (
                             <p className="text-tertiary">最大人数を超えています！</p>
+                        ) : (
+                            ''
+                        )}
+                        {isDuplicateArray(roster) ? (
+                            <p className="text-tertiary">同じ名前の人は設定できません！</p>
                         ) : (
                             ''
                         )}
@@ -338,7 +350,7 @@ const Run: NextPage = () => {
                         {isEnableLeader ? <DragGroupLeader 
                     leaderDragData={leaderDragData}
                     setLeaderDragData={setLeaderDragData}
-                    nOfGroup={nOfGroup}
+                    nOfGroup={isAddGroup && isExcessOrDeficiency?(nOfGroup+1):nOfGroup}
                          />:""}
                             </>
                         ):(
@@ -377,6 +389,7 @@ const Run: NextPage = () => {
             returnElement = (
                 <ResultElement
                     resultGrouping={resultGrouping}
+                    readers={leaderDragData.leader}
                     runCalculationAgain={runCalculationAgain}
                 />
             );
