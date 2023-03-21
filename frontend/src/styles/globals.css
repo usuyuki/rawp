@@ -173,5 +173,6 @@ button:disabled {
     align-items: center;
     position: relative;
     top: 15px;
+    left:10px;
     z-index: 5;
 }
