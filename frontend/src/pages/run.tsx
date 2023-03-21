@@ -229,7 +229,7 @@ const Run: NextPage = () => {
                         ></textarea>
                         <div>{nOfPeople}人</div>
                         <p className="text-primary">
-                            特定の人物を固定したい場合は、すべて入力後「4.オプション」より選択できます
+                            各グループに進行役を設けたい場合は、各項目入力後「4.オプション」より選択できます
                         </p>
                         {nOfPeople > 255 ? (
                             <p className="text-tertiary">最大人数を超えています！</p>
@@ -343,7 +343,7 @@ const Run: NextPage = () => {
                                 //checked復元用
                                 checked={isEnableLeader}
                             />
-                        <p className="cursor-pointer rounded-xl p-2 text-center peer-checked:bg-primary peer-checked:text-white">グループのリーダーを設定する</p>
+                        <p className="cursor-pointer rounded-xl p-2 text-center peer-checked:bg-primary peer-checked:text-white">グループの進行役を固定する</p>
                             
                         </label>
                         {isEnableLeader ? <DragGroupLeader 
