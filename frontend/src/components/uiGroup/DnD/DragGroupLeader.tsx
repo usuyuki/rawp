@@ -182,7 +182,7 @@ const DragGroupLeader:NextPage<Props> = ({leaderDragData,setLeaderDragData,nOfGr
 )}
         <SortableContainer
           id="leader"
-          label="班のリーダー"
+          label="グループの進行役"
           items={leaderDragData.leader}
         />
         </div>
