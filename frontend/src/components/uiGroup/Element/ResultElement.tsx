@@ -20,9 +20,9 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain, r
                             {roundIndex + 1}回目
                         </p>
                     </div>
-                    <div className="flex flex-col flex-wrap items-center justify-center rounded-xl border-2 border-dotted border-black px-4 py-6 ">
+                    <div className="flex flex-col flex-wrap items-center rounded-xl border-2 border-dotted border-black px-4 py-6 md:flex-row ">
                         {round.map((group, groupIndex) => (
-                            <div key={groupIndex}>
+                            <div key={groupIndex} class="w-full md:w-1/2 md:p-2">
                                 <div className="result-element-heading">
                                     <p className="rounded-lg bg-primary p-2 text-white md:text-xl">
                                         グループ{groupIndex + 1}
@@ -32,7 +32,7 @@ const ResultElement: NextPage<props> = ({ resultGrouping, runCalculationAgain, r
                                     {group.map((person, personIndex) => (
                                         <div
                                             key={personIndex}
-                                            className="flex items-center justify-center"
+                                            className="flex w-full items-center"
                                         >
                                             <span className={"material-symbols-outlined text-3xl "+(readers.includes(person) ? "text-primary":"")}>
                                                 person
